@@ -31,7 +31,11 @@ const Home = () => {
         tabBarInactiveTintColor: '#DFDEDE',
         tabBarShowLabel: false,
       })}>
-      <Tab.Screen name="HomeContainer" component={HomeContainer} />
+      <Tab.Screen
+        name="HomeContainer"
+        component={HomeContainer}
+        options={{headerShown: false}}
+      />
       <Tab.Screen name="Search" component={Search} />
       <Tab.Screen name="Chat History" component={ChatHistory} />
       <Tab.Screen

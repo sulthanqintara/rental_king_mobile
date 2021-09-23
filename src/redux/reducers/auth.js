@@ -32,9 +32,6 @@ const authReducer = (prevstate = defaultState, action) => {
     case 'SIGN_IN'.concat('_', Fulfilled):
       storeData('token', action.payload.data.result.token);
       storeData('userInfo', '');
-      //   getData('token').then(data => console.log(data));
-      //   getData('userInfo').then(data => console.log(data));
-
       return {
         ...prevstate,
         isPending: false,
