@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,13 @@ import {
   Pressable,
   Image,
 } from 'react-native';
-import styles from './LoginStyle';
+import {connect} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form';
+import styles from './LoginStyle';
 
 import imageBackground from '../../assets/img/Login.jpg';
 import googleIcon from '../../assets/img/google.png';
+import {loginAction} from '../../redux/actionCreators/auth';
 
 const Login = props => {
   const {
@@ -21,9 +23,23 @@ const Login = props => {
   } = useForm({mode: 'onBlur'});
 
   const onSubmit = data => {
-    console.log(data);
-    props.navigation.navigate('Home');
+    const form = new URLSearchParams();
+    form.append('email', data.email);
+    form.append('password', data.password);
+    props.onLogin(form);
   };
+
+  const isInitialMount = useRef(true);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      if (props.auth.isLogin) {
+        props.navigation.navigate('Home');
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.auth.isLogin]);
 
   return (
     <View style={styles.container}>
@@ -104,4 +120,17 @@ const Login = props => {
   );
 };
 
-export default Login;
+const mapStateToProps = ({auth}) => {
+  return {
+    auth,
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    onLogin: body => {
+      dispatch(loginAction(body));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -14,7 +14,6 @@ const ForgotPassword = props => {
   } = useForm({mode: 'onBlur'});
 
   const onSubmit = data => {
-    console.log(data);
     props.navigation.navigate('Login');
   };
 

@@ -13,6 +13,7 @@ import {
 import imageBackground from '../../assets/img/register.jpg';
 import googleIcon from '../../assets/img/google.png';
 import styles from './SignUpStyle';
+import {postRegister} from '../../utils/https/auth';
 
 const SignUp = props => {
   const {
@@ -23,6 +24,7 @@ const SignUp = props => {
 
   const onSubmit = data => {
     console.log(data);
+    postRegister(data).then(response => console.log(response));
   };
 
   return (
@@ -53,7 +55,7 @@ const SignUp = props => {
             )}
           />
           <Controller
-            name="phone"
+            name="phone_number"
             control={control}
             rules={{
               required: true,
@@ -99,7 +101,7 @@ const SignUp = props => {
             <Image source={googleIcon} style={styles.googleIcon} />
             <Text style={styles.buttonText}>Sign up with Google</Text>
           </Pressable>
-          {errors.username || errors.password || errors.phone ? (
+          {errors.username || errors.password || errors.phone_number ? (
             <Text style={styles.warning}>
               Username, Phone Number, and Password are required!
             </Text>
