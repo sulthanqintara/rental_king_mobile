@@ -4,16 +4,14 @@ import {getData} from '../../utils/asyncStorage';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    getData('token').then(
-      data =>
-        data !== ''
-          ? setTimeout(() => {
-              navigation.replace('Home');
-            }, 1000)
-          : setTimeout(() => {
-              navigation.replace('Login');
-            }, 1000),
-      //   console.log(data),
+    getData('token').then(data =>
+      data !== ''
+        ? setTimeout(() => {
+            navigation.replace('Home');
+          }, 1000)
+        : setTimeout(() => {
+            navigation.replace('Login');
+          }, 1000),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

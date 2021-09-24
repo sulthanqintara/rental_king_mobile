@@ -8,6 +8,7 @@ const defaultState = {
   isRejected: false,
   isLogin: false,
   error: {},
+  token: '',
 };
 
 const authReducer = (prevstate = defaultState, action) => {
@@ -38,6 +39,7 @@ const authReducer = (prevstate = defaultState, action) => {
         isFulfilled: true,
         authInfo: action.payload.data.result.userInfo,
         isLogin: true,
+        token: action.payload.data.result.token,
       };
     case 'SIGN_OUT'.concat('_', Pending):
       return {
@@ -62,6 +64,7 @@ const authReducer = (prevstate = defaultState, action) => {
         isFulfilled: true,
         authInfo: {},
         isLogin: false,
+        token: '',
       };
     default:
       return prevstate;

@@ -4,7 +4,6 @@ import {Image, Pressable} from 'react-native';
 const HomeCard = ({img}) => {
   return (
     <Pressable>
-      {console.log(img)}
       <Image style={styles.image} source={{uri: img}} />
     </Pressable>
   );
@@ -19,6 +18,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     marginHorizontal: 18,
     borderRadius: 10,
+    backgroundColor: '#737373',
   },
 });
 

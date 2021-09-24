@@ -28,7 +28,7 @@ const Home = () => {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#FFCD61',
-        tabBarInactiveTintColor: '#DFDEDE',
+        tabBarInactiveTintColor: '#737373',
         tabBarShowLabel: false,
       })}>
       <Tab.Screen
