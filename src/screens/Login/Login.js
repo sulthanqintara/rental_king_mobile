@@ -43,7 +43,6 @@ const Login = props => {
 
   return (
     <View style={styles.container}>
-      {console.log(props.auth)}
       <ImageBackground
         style={styles.imageBackground}
         source={imageBackground}

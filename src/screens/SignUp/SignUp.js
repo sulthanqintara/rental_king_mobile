@@ -23,7 +23,6 @@ const SignUp = props => {
   } = useForm({mode: 'onBlur'});
 
   const onSubmit = data => {
-    console.log(data);
     postRegister(data).then(response => console.log(response));
   };
 

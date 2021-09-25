@@ -10,7 +10,6 @@ import styles from './ProfileStyle';
 
 const Profile = props => {
   const LogoutHandler = async () => {
-    console.log(props);
     await props.onLogout();
     removeFew();
     props.navigation.replace('Login');
@@ -19,7 +18,6 @@ const Profile = props => {
   return (
     <>
       <View style={styles.profileHeader}>
-        {console.log(auth)}
         <Image style={styles.profileImage} source={{uri: auth.profilePic}} />
         <Text style={styles.profileHeaderText}>
           {auth.userName ? auth.userName : auth.email}

@@ -10,6 +10,7 @@ import SignUp from './src/screens/SignUp/SignUp';
 import ForgotPassword from './src/screens/ForgotPassword/ForgotPassword';
 import UpdateProfile from './src/screens/UpdateProfile/UpdateProfile';
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
+import Order from './src/screens/Order/Order';
 import {PersistGate} from 'redux-persist/integration/react';
 
 const redux = reduxConfig();
@@ -44,6 +45,11 @@ const App = () => {
             <StackScreen
               name="UpdateProfile"
               component={UpdateProfile}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="Order"
+              component={Order}
               options={{headerShown: false}}
             />
             <StackScreen

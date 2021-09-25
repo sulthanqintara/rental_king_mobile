@@ -6,14 +6,13 @@ const SplashScreen = ({navigation}) => {
   const auth = useSelector(reduxState => reduxState.auth);
 
   useEffect(() => {
-    console.log(auth.token);
     auth.token !== ''
       ? setTimeout(() => {
           navigation.replace('Home');
-        }, 1000)
+        }, 500)
       : setTimeout(() => {
           navigation.replace('Login');
-        }, 1000);
+        }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

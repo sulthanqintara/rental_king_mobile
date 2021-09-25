@@ -1,9 +1,13 @@
 import React from 'react';
 import {Image, Pressable} from 'react-native';
 
-const HomeCard = ({img}) => {
+const HomeCard = props => {
+  const {img, navigation, id} = props;
   return (
-    <Pressable>
+    <Pressable
+      onPress={async () => {
+        await navigation.navigate('Order', {id: id});
+      }}>
       <Image style={styles.image} source={{uri: img}} />
     </Pressable>
   );

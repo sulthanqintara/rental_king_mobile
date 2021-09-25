@@ -17,6 +17,7 @@ const HomeContainer = props => {
   };
   useEffect(() => {
     getPopularVehicleHandler();
+    console.log('asd');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -34,7 +35,12 @@ const HomeContainer = props => {
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {props.vehicle.vehicleData?.map((vehicle, idx) => {
           return (
-            <HomeCard img={vehicle.picture.split(',')[0]} key={vehicle.id} />
+            <HomeCard
+              {...props}
+              img={vehicle.picture.split(',')[0]}
+              key={vehicle.id}
+              id={vehicle.id}
+            />
           );
         })}
       </ScrollView>
@@ -47,7 +53,12 @@ const HomeContainer = props => {
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {props.vehicle.vehicleData?.map((vehicle, idx) => {
           return (
-            <HomeCard img={vehicle.picture.split(',')[0]} key={vehicle.id} />
+            <HomeCard
+              {...props}
+              img={vehicle.picture.split(',')[0]}
+              key={vehicle.id}
+              id={vehicle.id}
+            />
           );
         })}
       </ScrollView>
