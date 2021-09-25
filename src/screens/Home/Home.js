@@ -2,14 +2,17 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeContainer from '../HomeContainer/HomeContainer';
+import {useSelector} from 'react-redux';
+import {connect} from 'react-redux';
+import {logoutAction} from '../../redux/actionCreators/auth';
 
 import Profile from '../Profile/Profile';
 import Search from '../Search/Search';
 import ChatHistory from '../ChatHistory/ChatHistory';
-import {logoutAction} from '../../redux/actionCreators/auth';
-import {connect} from 'react-redux';
 
 const Home = () => {
+  const auth = useSelector(reduxState => reduxState.auth);
+
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
@@ -18,8 +21,10 @@ const Home = () => {
           let iconName = 'home';
           if (route.name === 'Home') {
             iconName = 'home';
-          } else if (route.name === 'Profile') {
+          } else if (route.name === 'Profile' && auth.token !== '') {
             iconName = 'person';
+          } else if (route.name === 'Profile' && auth.token === '') {
+            iconName = 'log-in-outline';
           } else if (route.name === 'Chat History') {
             iconName = 'file-tray-full';
           } else if (route.name === 'Search') {

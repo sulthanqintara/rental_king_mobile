@@ -5,19 +5,12 @@ import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import {logoutAction} from '../../redux/actionCreators/auth';
 import {getVehiclesAction} from '../../redux/actionCreators/vehicles';
 import {connect} from 'react-redux';
+
 import styles from './HomeContainerStyle';
 import headerImage from '../../assets/img/home.jpg';
 import HomeCard from '../../components/HomeCard/HomeCard';
 
 const HomeContainer = props => {
-  //   const LogoutHandler = async () => {
-  //     console.log(props);
-  //     props.onLogout();
-  //     getData('token').then(data => console.log(data));
-  //     removeFew();
-  //     props.navigation.replace('Login');
-  //   };
-
   const getPopularVehicleHandler = () => {
     let params = {order_by: 'v.popular_stats', sort: 'DESC', limit: '4'};
     props.getVehicle(params);
@@ -29,9 +22,6 @@ const HomeContainer = props => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* <Pressable onPress={LogoutHandler}>
-        <Text>Logout</Text>
-      </Pressable> */}
       <View>
         <Image style={styles.headerImage} source={headerImage} />
       </View>

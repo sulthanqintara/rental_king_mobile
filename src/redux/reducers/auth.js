@@ -37,8 +37,9 @@ const authReducer = (prevstate = defaultState, action) => {
         ...prevstate,
         isPending: false,
         isFulfilled: true,
-        authInfo: action.payload.data.result.userInfo,
         isLogin: true,
+        error: '',
+        authInfo: action.payload.data.result.userInfo,
         token: action.payload.data.result.token,
       };
     case 'SIGN_OUT'.concat('_', Pending):
@@ -56,8 +57,6 @@ const authReducer = (prevstate = defaultState, action) => {
         error: action.payload,
       };
     case 'SIGN_OUT'.concat('_', Fulfilled):
-      storeData('token', '');
-      storeData('authInfo', '');
       return {
         ...prevstate,
         isPending: false,

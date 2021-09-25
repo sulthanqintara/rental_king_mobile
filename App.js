@@ -8,6 +8,7 @@ import Home from './src/screens/Home/Home';
 import Login from './src/screens/Login/Login';
 import SignUp from './src/screens/SignUp/SignUp';
 import ForgotPassword from './src/screens/ForgotPassword/ForgotPassword';
+import UpdateProfile from './src/screens/UpdateProfile/UpdateProfile';
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
 import {PersistGate} from 'redux-persist/integration/react';
 
@@ -38,6 +39,11 @@ const App = () => {
             <StackScreen
               name="Forgot"
               component={ForgotPassword}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="UpdateProfile"
+              component={UpdateProfile}
               options={{headerShown: false}}
             />
             <StackScreen
