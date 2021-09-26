@@ -8,6 +8,7 @@ import {
   Pressable,
   Image,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 
 import imageBackground from '../../assets/img/register.jpg';
@@ -23,7 +24,10 @@ const SignUp = props => {
   } = useForm({mode: 'onBlur'});
 
   const onSubmit = data => {
-    postRegister(data).then(response => console.log(response));
+    postRegister(data).then(() => {
+      ToastAndroid.show("Signed Up, Let's Login!", ToastAndroid.SHORT);
+      props.navigation.navigate('Login');
+    });
   };
 
   return (
