@@ -45,12 +45,15 @@ const HomeContainer = props => {
         })}
       </ScrollView>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Recommended</Text>
+        <Text style={styles.titleText}>Hot Deals</Text>
         <Pressable>
           <Text>View More ></Text>
         </Pressable>
       </View>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        style={styles.cardContainer}>
         {props.vehicle.vehicleData?.map((vehicle, idx) => {
           return (
             <HomeCard

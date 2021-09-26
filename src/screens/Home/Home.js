@@ -42,7 +42,11 @@ const Home = () => {
         options={{headerShown: false}}
       />
       <Tab.Screen name="Search" component={Search} />
-      <Tab.Screen name="Chat History" component={ChatHistory} />
+      <Tab.Screen
+        name="Chat History"
+        component={ChatHistory}
+        options={{headerShown: false}}
+      />
       <Tab.Screen
         name="Profile"
         component={Profile}

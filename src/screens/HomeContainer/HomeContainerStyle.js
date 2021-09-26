@@ -17,4 +17,7 @@ export default StyleSheet.create({
     fontWeight: '700',
     fontSize: 22,
   },
+  cardContainer: {
+    marginBottom: 15,
+  },
 });
