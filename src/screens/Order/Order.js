@@ -18,7 +18,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 
 const Order = props => {
-  const {route} = props;
+  const {route, navigation} = props;
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
 
   const [available, setAvailable] = useState('');
@@ -47,6 +47,9 @@ const Order = props => {
       new Date(
         pickedDate.setDate(pickedDate.getDate() + Number(duration)),
       ).toLocaleDateString('en-ca'),
+    vehicleImage: picture,
+    model,
+    duration,
   };
 
   useEffect(() => {
@@ -75,7 +78,7 @@ const Order = props => {
           <Pressable
             style={styles.back}
             onPress={() => {
-              props.navigation.goBack();
+              navigation.goBack();
             }}>
             <Ionicons name="chevron-back-outline" size={28} color="white" />
           </Pressable>
@@ -198,7 +201,7 @@ const Order = props => {
                 ToastAndroid.SHORT,
               );
             }
-            return props.navigation.navigate('Payment1', nextData);
+            return navigation.navigate('Payment1', nextData);
           }}>
           <Text style={styles.reserveTxt}>Reservation</Text>
         </Pressable>

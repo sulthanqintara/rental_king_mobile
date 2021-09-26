@@ -1,0 +1,50 @@
+import {StyleSheet} from 'react-native';
+
+export default StyleSheet.create({
+  container: {paddingHorizontal: 20, flex: 1, backgroundColor: 'white'},
+  flexRow: {flexDirection: 'row', alignItems: 'center'},
+  headerTitle: {marginLeft: 15},
+  bigTxt: {fontSize: 24, fontWeight: '600'},
+  header: {alignItems: 'center', paddingTop: 20},
+  success: {
+    color: '#087E0D',
+    textAlign: 'center',
+    marginVertical: 30,
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  vehiclePic: {width: 'auto', height: 201, padding: 20, marginBottom: 25},
+  rating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFCD61',
+    width: 50,
+    height: 23,
+    borderRadius: 30,
+    marginLeft: 'auto',
+    marginTop: 'auto',
+  },
+  ratingTxt: {color: 'white'},
+  textGap: {
+    paddingVertical: 10,
+  },
+  identity: {
+    borderTopWidth: 2,
+    borderColor: '#DFDEDE',
+    marginTop: 10,
+    paddingTop: 10,
+  },
+  identityTxt: {paddingVertical: 5},
+  greenTxt: {color: '#087E0D', fontWeight: '600'},
+  order: {
+    width: 'auto',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFCD61',
+    height: 70,
+    marginTop: 20,
+    marginBottom: 30,
+    borderRadius: 10,
+  },
+});
