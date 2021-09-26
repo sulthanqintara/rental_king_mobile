@@ -33,19 +33,23 @@ const UpdateProfile = props => {
   const [address, setAddress] = useState(auth.address);
 
   const saveOnPress = () => {
-    Alert.alert('Alert Title', 'My Alert Msg', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => {
-          saveHandler();
+    Alert.alert(
+      'Are you sure you want to save?',
+      'This action cannot be undone!',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
         },
-      },
-    ]);
+        {
+          text: 'OK',
+          onPress: () => {
+            saveHandler();
+          },
+        },
+      ],
+    );
   };
 
   const saveHandler = () => {

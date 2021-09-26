@@ -6,31 +6,51 @@ import {
   ImageBackground,
   Pressable,
   ToastAndroid,
+  ScrollView,
 } from 'react-native';
 import styles from './OrderStyle';
 import axios from 'axios';
 import DatePicker from 'react-native-date-picker';
+import RNPickerSelect from 'react-native-picker-select';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
 
 const Order = props => {
   const {route} = props;
+  const auth = useSelector(reduxState => reduxState.auth.authInfo);
+
   const [available, setAvailable] = useState('');
   const [location, setLocation] = useState('');
   const [model, setModel] = useState('');
   const [picture, setPicture] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
-  const [ownerId, setOwnerId] = useState('');
   const [favourite, setFavourite] = useState(false);
-
-  const [open, setOpen] = useState(false);
+  const [count, setCount] = useState(1);
+  const [duration, setDuration] = useState(1);
   const [ReserveDate, setReserveDate] = useState('Select Date');
+  const [open, setOpen] = useState(false);
+  const id = route.params.id;
+
+  const pickedDate = typeof ReserveDate !== 'string' && new Date(ReserveDate);
+  const nextData = {
+    user_id: auth.user_id,
+    model_id: id,
+    amount_rented: count,
+    prepayment: count * price * duration,
+    rent_start_date:
+      typeof ReserveDate !== 'string' && pickedDate.toLocaleDateString('en-CA'),
+    rent_finish_date:
+      typeof ReserveDate !== 'string' &&
+      new Date(
+        pickedDate.setDate(pickedDate.getDate() + Number(duration)),
+      ).toLocaleDateString('en-ca'),
+  };
 
   useEffect(() => {
     const url = 'http://192.168.0.100:8000/vehicles';
-    const id = route.params.id;
     axios
       .get(url, {
         params: {id: id},
@@ -40,20 +60,23 @@ const Order = props => {
         setAvailable(arrayResult.amount_available);
         setLocation(arrayResult.location);
         setModel(arrayResult.model);
-        setPicture(arrayResult.picture);
+        setPicture(arrayResult.picture.split(',')[0]);
         setPrice(arrayResult.price);
         setCategory(arrayResult.category);
-        setOwnerId(arrayResult.owner);
         console.log(data);
       })
       .catch(err => console.log(err.response));
   }, []);
 
   return (
-    <View>
+    <ScrollView>
       <ImageBackground style={styles.header} source={{uri: picture}}>
         <View style={styles.headerController}>
-          <Pressable style={styles.back}>
+          <Pressable
+            style={styles.back}
+            onPress={() => {
+              props.navigation.goBack();
+            }}>
             <Ionicons name="chevron-back-outline" size={28} color="white" />
           </Pressable>
           <View style={styles.rightHeader}>
@@ -83,7 +106,7 @@ const Order = props => {
           <Text style={styles.title}>
             {model}
             {'\n'}
-            Rp. {price}/day
+            Rp. {price * count}/day
           </Text>
           <Pressable>
             <Ionicons name="chatbubble-outline" color="#FFCD61" size={35} />
@@ -109,20 +132,24 @@ const Order = props => {
         <View style={styles.selector}>
           <Text style={styles.selectorTitle}>Select {category}(s)</Text>
           <View style={styles.counter}>
-            <View style={styles.counterBtn}>
+            <Pressable
+              onPress={() => count > 1 && setCount(count - 1)}
+              style={styles.counterBtn}>
               <Text style={styles.selectorTitle}>-</Text>
-            </View>
-            <Text style={styles.amount}> {available} </Text>
-            <View style={styles.counterBtn}>
+            </Pressable>
+            <Text style={styles.amount}> {count} </Text>
+            <Pressable
+              onPress={() => count < available && setCount(count + 1)}
+              style={styles.counterBtn}>
               <Text style={styles.selectorTitle}>+</Text>
-            </View>
+            </Pressable>
           </View>
         </View>
-        <View>
+        <View style={styles.picker}>
           <Pressable style={styles.date} onPress={() => setOpen(true)}>
             <Text>
               {typeof ReserveDate === 'object'
-                ? ReserveDate.toLocaleDateString('en-CA')
+                ? ReserveDate.toDateString()
                 : ReserveDate}
             </Text>
           </Pressable>
@@ -139,9 +166,44 @@ const Order = props => {
               setOpen(false);
             }}
           />
+          <RNPickerSelect
+            placeholder={{}}
+            onValueChange={value => setDuration(value)}
+            useNativeAndroidPickerStyle={false}
+            style={styles}
+            items={[
+              {label: '1 Day', value: 1},
+              {label: '2 Days', value: 2},
+              {label: '3 Days', value: 3},
+            ]}
+            Icon={() => {
+              return (
+                <Ionicons
+                  name="caret-down"
+                  size={20}
+                  color="gray"
+                  style={styles.dropdownIcon}
+                />
+              );
+            }}
+          />
         </View>
+        {console.log(nextData)}
+        <Pressable
+          style={styles.reserve}
+          onPress={() => {
+            if (typeof ReserveDate === 'string') {
+              return ToastAndroid.show(
+                'Please select date to reserve!',
+                ToastAndroid.SHORT,
+              );
+            }
+            return props.navigation.navigate('Payment1', nextData);
+          }}>
+          <Text style={styles.reserveTxt}>Reservation</Text>
+        </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
