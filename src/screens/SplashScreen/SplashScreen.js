@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {useSelector} from 'react-redux';
+import styles from './SplashScreenStyle';
 
 const SplashScreen = ({navigation}) => {
   const auth = useSelector(reduxState => reduxState.auth);
@@ -16,8 +17,8 @@ const SplashScreen = ({navigation}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <View>
-      <Text>INI SPLASH SCREN</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>RKM</Text>
     </View>
   );
 };
