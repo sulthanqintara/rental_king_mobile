@@ -1,5 +1,6 @@
 import React from 'react';
 import {Image, Pressable} from 'react-native';
+import {API_URL} from '@env';
 
 const HomeCard = props => {
   const {img, navigation, id} = props;
@@ -8,7 +9,10 @@ const HomeCard = props => {
       onPress={async () => {
         await navigation.navigate('Order', {id: id});
       }}>
-      <Image style={styles.image} source={{uri: img}} />
+      <Image
+        style={styles.image}
+        source={{uri: img.replace('http://localhost:8000', `${API_URL}`)}}
+      />
     </Pressable>
   );
 };

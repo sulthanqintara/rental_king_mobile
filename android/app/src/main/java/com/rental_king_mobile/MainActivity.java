@@ -11,7 +11,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "rental_king_mobile";
+    return "RentalKingMotor";
   }
   @Override
   protected void onCreate(Bundle savedInstanceState) {

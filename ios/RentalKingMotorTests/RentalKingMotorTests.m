@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface rental_king_mobileTests : XCTestCase
+@interface RentalKingMotorTests : XCTestCase
 
 @end
 
-@implementation rental_king_mobileTests
+@implementation RentalKingMotorTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

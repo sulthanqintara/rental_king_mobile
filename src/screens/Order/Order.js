@@ -35,22 +35,31 @@ const Order = props => {
   const [open, setOpen] = useState(false);
   const id = route.params.id;
 
-  const pickedDate = typeof ReserveDate !== 'string' && new Date(ReserveDate);
-  const nextData = {
-    user_id: auth.user_id,
-    model_id: id,
-    amount_rented: count,
-    prepayment: count * price * duration,
-    rent_start_date:
-      typeof ReserveDate !== 'string' && pickedDate.toLocaleDateString('en-CA'),
-    rent_finish_date:
-      typeof ReserveDate !== 'string' &&
-      new Date(
-        pickedDate.setDate(pickedDate.getDate() + Number(duration)),
-      ).toLocaleDateString('en-ca'),
-    vehicleImage: picture,
-    model,
-    duration,
+  const currentDate = new Date(ReserveDate);
+
+  const onPressHandler = () => {
+    const nextData = {
+      user_id: auth.user_id,
+      model_id: id,
+      amount_rented: count,
+      prepayment: count * price * duration,
+      rent_start_date: `${currentDate.getFullYear()}-${
+        currentDate.getMonth() + 1
+      }-${currentDate.getDate()}`,
+      rent_finish_date: `${currentDate.getFullYear()}-${
+        currentDate.getMonth() + 1
+      }-${currentDate.getDate() + duration}`,
+      vehicleImage: picture,
+      model,
+      duration,
+    };
+    if (typeof ReserveDate === 'string') {
+      return ToastAndroid.show(
+        'Please select date to reserve!',
+        ToastAndroid.SHORT,
+      );
+    }
+    return navigation.navigate('Payment1', nextData);
   };
 
   useEffect(() => {
@@ -64,7 +73,11 @@ const Order = props => {
         setAvailable(arrayResult.amount_available);
         setLocation(arrayResult.location);
         setModel(arrayResult.model);
-        setPicture(arrayResult.picture.split(',')[0]);
+        setPicture(
+          arrayResult.picture
+            .split(',')[0]
+            .replace('http://localhost:8000', `${API_URL}`),
+        );
         setPrice(arrayResult.price);
         setCategory(arrayResult.category);
       })
@@ -191,17 +204,7 @@ const Order = props => {
             }}
           />
         </View>
-        <Pressable
-          style={styles.reserve}
-          onPress={() => {
-            if (typeof ReserveDate === 'string') {
-              return ToastAndroid.show(
-                'Please select date to reserve!',
-                ToastAndroid.SHORT,
-              );
-            }
-            return navigation.navigate('Payment1', nextData);
-          }}>
+        <Pressable style={styles.reserve} onPress={onPressHandler}>
           <Text style={styles.reserveTxt}>Reservation</Text>
         </Pressable>
       </View>

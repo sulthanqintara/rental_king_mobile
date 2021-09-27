@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "rental_king_mobile.app"
-               BlueprintName = "rental_king_mobile"
-               ReferencedContainer = "container:rental_king_mobile.xcodeproj">
+               BuildableName = "RentalKingMotor.app"
+               BlueprintName = "RentalKingMotor"
+               ReferencedContainer = "container:RentalKingMotor.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "rental_king_mobileTests.xctest"
-               BlueprintName = "rental_king_mobileTests"
-               ReferencedContainer = "container:rental_king_mobile.xcodeproj">
+               BuildableName = "RentalKingMotorTests.xctest"
+               BlueprintName = "RentalKingMotorTests"
+               ReferencedContainer = "container:RentalKingMotor.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "rental_king_mobile.app"
-            BlueprintName = "rental_king_mobile"
-            ReferencedContainer = "container:rental_king_mobile.xcodeproj">
+            BuildableName = "RentalKingMotor.app"
+            BlueprintName = "RentalKingMotor"
+            ReferencedContainer = "container:RentalKingMotor.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "rental_king_mobile.app"
-            BlueprintName = "rental_king_mobile"
-            ReferencedContainer = "container:rental_king_mobile.xcodeproj">
+            BuildableName = "RentalKingMotor.app"
+            BlueprintName = "RentalKingMotor"
+            ReferencedContainer = "container:RentalKingMotor.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

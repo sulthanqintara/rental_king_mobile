@@ -21,7 +21,7 @@ const Payment3 = props => {
   const [model, setModel] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [finishDate, setFinishDate] = useState(null);
-  const [payBefore, setPayBefore] = useState(null);
+  const [payBefore, setPayBefore] = useState('');
   const [prepayment, setPrepayment] = useState(null);
 
   const duration = route.params.duration;
@@ -32,11 +32,7 @@ const Payment3 = props => {
       const result = data.result;
       const currentDate = new Date(result.time_posted);
       setPaymentCode(result.payment_code);
-      setPayBefore(
-        new Date(
-          currentDate.setDate(currentDate.getDate() + 1),
-        ).toLocaleDateString('en-CA'),
-      );
+      setPayBefore(new Date(currentDate.setDate(currentDate.getDate() + 1)));
       setBookCode(result.booking_code);
       setAmount(result.amount_rented);
       setStartDate(new Date(result.rent_start_date).toDateString());
@@ -105,7 +101,10 @@ const Payment3 = props => {
           Insert your payment code while you transfer booking order
         </Text>
         <Text style={[styles3.smallTxt, styles3.center]}>Pay Before :</Text>
-        <Text style={[styles3.center, styles3.timer]}>{payBefore}</Text>
+        <Text style={[styles3.center, styles3.timer]}>
+          {typeof payBefore !== 'string' && payBefore.toLocaleDateString()}{' '}
+          {typeof payBefore !== 'string' && payBefore.toLocaleTimeString()}
+        </Text>
         <Text style={styles3.normalTxt}>Bank account information :</Text>
         <Text style={[styles.bigTxt, styles3.center]}>0290-90203-345-2</Text>
         <Text style={[styles3.normalTxt, styles3.owner]}>
