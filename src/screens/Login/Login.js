@@ -35,7 +35,10 @@ const Login = props => {
       isInitialMount.current = false;
     } else {
       if (props.auth.isLogin) {
-        props.navigation.navigate('Home');
+        props.navigation.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

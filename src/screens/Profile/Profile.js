@@ -12,7 +12,10 @@ const Profile = props => {
   const LogoutHandler = async () => {
     await props.onLogout();
     removeFew();
-    props.navigation.replace('Login');
+    props.navigation.reset({
+      index: 0,
+      routes: [{name: 'Login'}],
+    });
   };
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
   return (

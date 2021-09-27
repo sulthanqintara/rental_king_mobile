@@ -101,7 +101,6 @@ const Payment1 = props => {
       <Pressable
         style={styles.order}
         onPress={() => {
-          console.log({...bodyData, idCard, payment});
           navigation.navigate('Payment2', {...bodyData, idCard, payment});
         }}>
         <Text style={styles.bigTxt}>See Order Details</Text>

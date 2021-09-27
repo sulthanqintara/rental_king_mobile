@@ -1,6 +1,6 @@
 import axios from 'axios';
-const url = 'http://192.168.0.100:8000';
+import {API_URL} from '@env';
 
 export const getVehicles = params => {
-  return axios.get(`${url}/vehicles`, {params: params});
+  return axios.get(`${API_URL}/vehicles`, {params: params});
 };

@@ -29,9 +29,7 @@ const Payment3 = props => {
 
   useEffect(() => {
     getTransactionByID(route.params.transactionId).then(({data}) => {
-      console.log(passedData);
       const result = data.result;
-      console.log(result);
       const currentDate = new Date(result.time_posted);
       setPaymentCode(result.payment_code);
       setPayBefore(

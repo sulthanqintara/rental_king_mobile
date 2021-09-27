@@ -12,6 +12,7 @@ import styles from './OrderStyle';
 import axios from 'axios';
 import DatePicker from 'react-native-date-picker';
 import RNPickerSelect from 'react-native-picker-select';
+import {API_URL} from '@env';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -53,7 +54,7 @@ const Order = props => {
   };
 
   useEffect(() => {
-    const url = 'http://192.168.0.100:8000/vehicles';
+    const url = `${API_URL}/vehicles`;
     axios
       .get(url, {
         params: {id: id},
@@ -66,7 +67,6 @@ const Order = props => {
         setPicture(arrayResult.picture.split(',')[0]);
         setPrice(arrayResult.price);
         setCategory(arrayResult.category);
-        console.log(data);
       })
       .catch(err => console.log(err.response));
   }, []);
@@ -191,7 +191,6 @@ const Order = props => {
             }}
           />
         </View>
-        {console.log(nextData)}
         <Pressable
           style={styles.reserve}
           onPress={() => {

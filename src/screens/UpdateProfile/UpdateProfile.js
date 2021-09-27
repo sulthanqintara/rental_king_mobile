@@ -21,7 +21,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const UpdateProfile = props => {
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
-  const other = useSelector(reduxState => reduxState.auth);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
@@ -54,7 +53,6 @@ const UpdateProfile = props => {
 
   const saveHandler = () => {
     const form = new FormData();
-    console.log(typeof dob);
     form.append('gender', gender);
     form.append('name', name);
     form.append('email', email);
@@ -63,7 +61,6 @@ const UpdateProfile = props => {
     form.append('address', address);
     dispatch(profileAction(form, auth.user_id));
     ToastAndroid.show('Profile Updated!', ToastAndroid.SHORT);
-    console.log(other);
   };
 
   return (

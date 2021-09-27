@@ -1,11 +1,10 @@
 import axios from 'axios';
 import {getData} from '../asyncStorage';
-
-const url = 'http://192.168.0.100:8000';
+import {API_URL} from '@env';
 
 export const postTransactions = body => {
   return getData('token').then(token =>
-    axios.post(`${url}/transactions`, body, {
+    axios.post(`${API_URL}/transactions`, body, {
       headers: {'x-access-token': `Bearer ${token}`},
     }),
   );
@@ -13,14 +12,14 @@ export const postTransactions = body => {
 
 export const getTransactionByID = id => {
   return getData('token').then(token =>
-    axios.get(`${url}/transactions/${id}`, {
+    axios.get(`${API_URL}/transactions/${id}`, {
       headers: {'x-access-token': `Bearer ${token}`},
     }),
   );
 };
 export const patchTransaction = body => {
   return getData('token').then(token =>
-    axios.patch(`${url}/transactions`, body, {
+    axios.patch(`${API_URL}/transactions`, body, {
       headers: {'x-access-token': `Bearer ${token}`},
     }),
   );

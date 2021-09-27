@@ -17,7 +17,6 @@ const HomeContainer = props => {
   };
   useEffect(() => {
     getPopularVehicleHandler();
-    console.log('asd');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

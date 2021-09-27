@@ -33,7 +33,6 @@ const Payment2 = props => {
 
     postTransactions(body)
       .then(data => {
-        console.log(data.data);
         navigation.navigate('Payment3', {
           transactionId: data.data.result,
           duration: passedData.duration,
