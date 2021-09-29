@@ -38,8 +38,5 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
   },
-  logoutBtnTxt: {
-    fontSize: 18,
-    fontWeight: '700',
-  },
+  flexRow: {flexDirection: 'row'},
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, Pressable, Image} from 'react-native';
 import {connect} from 'react-redux';
 import {logoutAction} from '../../redux/actionCreators/auth';
@@ -7,8 +7,10 @@ import {useSelector} from 'react-redux';
 import {removeFew} from '../../utils/asyncStorage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './ProfileStyle';
+import LogoutModal from '../../components/Modals/Modal';
 
 const Profile = props => {
+  const [modalVisible, setModalVisible] = useState(false);
   const LogoutHandler = async () => {
     await props.onLogout();
     removeFew();
@@ -17,6 +19,7 @@ const Profile = props => {
       routes: [{name: 'Login'}],
     });
   };
+
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
   return (
     <>
@@ -65,9 +68,17 @@ const Profile = props => {
             />
           </Pressable>
         </View>
-        <Pressable onPress={LogoutHandler} style={styles.logoutBtn}>
-          <Text style={styles.logoutBtnTxt}>Log out</Text>
-        </Pressable>
+        <LogoutModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          buttonStyle={styles.logoutBtn}
+          nextHandler={LogoutHandler}
+          buttonText="Log out"
+          leftButtonText="Yes, Log me out"
+          rightButtonText="Cancel"
+          titleText="Are you sure you want to log out?"
+          leftButtonColor="#b02a37"
+        />
       </View>
     </>
   );

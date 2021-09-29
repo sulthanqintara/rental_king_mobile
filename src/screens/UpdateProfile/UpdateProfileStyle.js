@@ -6,7 +6,7 @@ export default StyleSheet.create({
     paddingHorizontal: 18,
   },
   title: {
-    marginTop: 30,
+    marginTop: 25,
     flexDirection: 'row',
     marginRight: 'auto',
     justifyContent: 'center',
@@ -20,6 +20,8 @@ export default StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
+    elevation: 10,
+    paddingBottom: 10,
   },
   profilePic: {
     width: 100,
@@ -74,4 +76,5 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
   },
+  profileContainer: {alignItems: 'center'},
 });

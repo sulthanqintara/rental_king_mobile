@@ -17,6 +17,14 @@ export const getTransactionByID = id => {
     }),
   );
 };
+
+export const getTransaction = (params, token) => {
+  return axios.get(`${API_URL}/transactions`, {
+    params,
+    headers: {'x-access-token': `Bearer ${token}`},
+  });
+};
+
 export const patchTransaction = body => {
   return getData('token').then(token =>
     axios.patch(`${API_URL}/transactions`, body, {

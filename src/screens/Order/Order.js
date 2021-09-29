@@ -73,11 +73,7 @@ const Order = props => {
         setAvailable(arrayResult.amount_available);
         setLocation(arrayResult.location);
         setModel(arrayResult.model);
-        setPicture(
-          arrayResult.picture
-            .split(',')[0]
-            .replace('http://localhost:8000', `${API_URL}`),
-        );
+        setPicture(API_URL + arrayResult.picture);
         setPrice(arrayResult.price);
         setCategory(arrayResult.category);
       })

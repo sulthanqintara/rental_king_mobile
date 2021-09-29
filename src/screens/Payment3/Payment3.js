@@ -12,6 +12,7 @@ import styles from '../Payment1/Payment1Style';
 import styles3 from './Payment3Style';
 import LinearGradient from 'react-native-linear-gradient';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {useSelector} from 'react-redux';
 
 const Payment3 = props => {
   const {navigation, route} = props;
@@ -23,27 +24,31 @@ const Payment3 = props => {
   const [finishDate, setFinishDate] = useState(null);
   const [payBefore, setPayBefore] = useState('');
   const [prepayment, setPrepayment] = useState(null);
+  const auth = useSelector(state => state.auth.authInfo);
 
   const duration = route.params.duration;
   const passedData = route.params.passedData;
 
   useEffect(() => {
-    getTransactionByID(route.params.transactionId).then(({data}) => {
-      const result = data.result;
-      const currentDate = new Date(result.time_posted);
-      setPaymentCode(result.payment_code);
-      setPayBefore(new Date(currentDate.setDate(currentDate.getDate() + 1)));
-      setBookCode(result.booking_code);
-      setAmount(result.amount_rented);
-      setStartDate(new Date(result.rent_start_date).toDateString());
-      setFinishDate(new Date(result.rent_finish_date).toDateString());
-      setPrepayment(result.prepayment);
-      getVehicles({id: result.model_d})
-        .then(vehicleData => {
-          setModel(vehicleData.data.result[0].model);
-        })
-        .catch(err => console.log(err));
-    });
+    console.log(auth);
+    getTransactionByID(route.params.transactionId || passedData?.id).then(
+      ({data}) => {
+        const result = data.result;
+        const currentDate = new Date(result.time_posted);
+        setPaymentCode(result.payment_code);
+        setPayBefore(new Date(currentDate.setDate(currentDate.getDate() + 1)));
+        setBookCode(result.booking_code);
+        setAmount(result.amount_rented);
+        setStartDate(new Date(result.rent_start_date).toDateString());
+        setFinishDate(new Date(result.rent_finish_date).toDateString());
+        setPrepayment(result.prepayment);
+        getVehicles({id: result.model_d})
+          .then(vehicleData => {
+            setModel(vehicleData.data.result[0].model);
+          })
+          .catch(err => console.log(err));
+      },
+    );
   }, []);
 
   const copyToClipboard = () => {
@@ -54,7 +59,16 @@ const Payment3 = props => {
   };
 
   const finishPaymentHandler = () => {
-    const body = {id: route.params.transactionId, user_paid_status: 1};
+    const body =
+      auth.authLevel === 3
+        ? {
+            id: route.params.transactionId || passedData.id,
+            user_paid_status: 1,
+          }
+        : {
+            id: route.params.transactionId || passedData.id,
+            seller_paid_status: 1,
+          };
     patchTransaction(body);
     props.navigation.navigate('FinishedPayment', {passedData});
   };
@@ -143,7 +157,11 @@ const Payment3 = props => {
         />
       </View>
       <Pressable style={styles.order} onPress={finishPaymentHandler}>
-        <Text style={styles.bigTxt}>Finish Payment</Text>
+        {auth.authLevel === 3 ? (
+          <Text style={styles.bigTxt}>Finish Payment</Text>
+        ) : (
+          <Text style={styles.bigTxt}>Confirm Payment</Text>
+        )}
       </Pressable>
     </View>
   );

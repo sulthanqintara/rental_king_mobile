@@ -9,10 +9,7 @@ const HomeCard = props => {
       onPress={async () => {
         await navigation.navigate('Order', {id: id});
       }}>
-      <Image
-        style={styles.image}
-        source={{uri: img.replace('http://localhost:8000', `${API_URL}`)}}
-      />
+      <Image style={styles.image} source={{uri: API_URL + img}} />
     </Pressable>
   );
 };
