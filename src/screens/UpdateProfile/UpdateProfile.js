@@ -7,7 +7,6 @@ import {
   ImageBackground,
   TextInput,
   Pressable,
-  Alert,
   ToastAndroid,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';

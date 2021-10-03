@@ -117,4 +117,10 @@ export default StyleSheet.create({
   },
   availableTxt: {color: '#087E0D', fontWeight: '700', marginBottom: 5},
   notAvailableTxt: {color: 'red', fontWeight: '700', marginBottom: 5},
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgb(255, 255, 255)',
+  },
 });

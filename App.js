@@ -16,7 +16,9 @@ import Payment1 from './src/screens/Payment1/Payment1';
 import Payment2 from './src/screens/Payment2/Payment2';
 import Payment3 from './src/screens/Payment3/Payment3';
 import FinishedPayment from './src/screens/FinishedPayment/FinishedPayment';
-import addItem from './src/screens/addItem/addItem';
+import AddItem from './src/screens/addItem/AddItem';
+import Filter from './src/screens/Filter/Filter';
+import EditItem from './src/screens/EditItem/EditItem';
 
 const redux = reduxConfig();
 
@@ -79,7 +81,17 @@ const App = () => {
             />
             <StackScreen
               name="AddItem"
-              component={addItem}
+              component={AddItem}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="Filter"
+              component={Filter}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="EditItem"
+              component={EditItem}
               options={{headerShown: false}}
             />
             <StackScreen

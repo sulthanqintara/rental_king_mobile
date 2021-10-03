@@ -7,6 +7,7 @@ import {
   Pressable,
   ToastAndroid,
   ScrollView,
+  Modal,
 } from 'react-native';
 import styles from './OrderStyle';
 import axios from 'axios';
@@ -18,6 +19,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import imagePlaceholder from '../../assets/img/imagePlaceholder.png';
 import {useSelector} from 'react-redux';
+import {ActivityIndicator, Colors} from 'react-native-paper';
 
 const Order = props => {
   const {route, navigation} = props;
@@ -33,6 +35,9 @@ const Order = props => {
   const [count, setCount] = useState(1);
   const [duration, setDuration] = useState(1);
   const [ReserveDate, setReserveDate] = useState('Select Date');
+  const [owner, setOwner] = useState(null);
+  const [visible, setVisible] = useState(true);
+
   const [open, setOpen] = useState(false);
   const id = route.params.id;
 
@@ -67,6 +72,9 @@ const Order = props => {
     }
     return navigation.navigate('Payment1', nextData);
   };
+  const ownerHandler = () => {
+    navigation.navigate('EditItem', {id});
+  };
 
   useEffect(() => {
     const url = `${API_URL}/vehicles`;
@@ -75,6 +83,7 @@ const Order = props => {
         params: {id: id},
       })
       .then(data => {
+        setVisible(false);
         const arrayResult = data.data.result.data[0];
         setAvailable(arrayResult.amount_available);
         setLocation(arrayResult.location);
@@ -82,15 +91,31 @@ const Order = props => {
         setPicture(API_URL + arrayResult.picture);
         setPrice(arrayResult.price);
         setCategory(arrayResult.category);
+        setOwner(arrayResult.owner);
       })
       .catch(err => console.log(err.response));
   }, []);
 
   return (
     <ScrollView>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={visible}
+        onRequestClose={() => {
+          setVisible(!visible);
+        }}>
+        <View style={styles.centeredView}>
+          <ActivityIndicator animating={true} color={Colors.red800} />
+        </View>
+      </Modal>
       <ImageBackground
         style={styles.header}
-        source={picture.split(API_URL)[1] ? {uri: picture} : imagePlaceholder}>
+        source={
+          picture.split(API_URL)[1]
+            ? {uri: picture.split(',')[0]}
+            : imagePlaceholder
+        }>
         <View style={styles.headerController}>
           <Pressable
             style={styles.back}
@@ -129,7 +154,9 @@ const Order = props => {
             Rp. {price * count}/day
           </Text>
           <Pressable>
-            <Ionicons name="chatbubble-outline" color="#FFCD61" size={35} />
+            {auth.authLevel === 3 && (
+              <Ionicons name="chatbubble-outline" color="#FFCD61" size={35} />
+            )}
           </Pressable>
         </View>
         <Text style={styles.textPadding}>Max for 2 person</Text>
@@ -210,7 +237,7 @@ const Order = props => {
         </View>
         <Pressable
           style={available ? styles.reserve : styles.reserveDisabled}
-          onPress={onPressHandler}
+          onPress={owner === auth.authLevel ? ownerHandler : onPressHandler}
           disabled={available <= 0 ? true : false}>
           <Text
             style={
@@ -218,7 +245,7 @@ const Order = props => {
                 ? styles.reserveTxt
                 : [styles.reserveTxt, styles.disabledReseveTxt]
             }>
-            Reservation
+            {owner === auth.authLevel ? 'Edit Item' : 'Reservation'}
           </Text>
         </Pressable>
       </View>

@@ -15,7 +15,7 @@ import {useSelector} from 'react-redux';
 import {addVehicles} from '../../utils/https/vehicles';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import styles from './addItemStyle';
+import styles from './AddItemStyle';
 import camIcon from '../../assets/img/camCentered.png';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CustomModal from '../../components/Modals/Modal';

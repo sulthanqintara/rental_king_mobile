@@ -8,17 +8,32 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './SearchStyle';
 import {getVehicles} from '../../utils/https/vehicles';
 
-const Search = ({navigation}) => {
+const Search = ({navigation, filter, route}) => {
   const [data, setData] = useState([]);
   const [nextPage, setNexPage] = useState(null);
-
-  // useEffect(() => {
-  //   setData(prevState => [...prevState, ...dummySearch]);
-  // }, [setData]);
+  const params = route.params;
+  const date = params?.date ? params.date : null;
+  const location = params?.location ? params.location : null;
+  const maxPrice = params?.maxPrice ? params.maxPrice : null;
+  const minPrice = params?.minPrice ? params.minPrice : null;
+  const rating = params?.rating ? params.rating : null;
+  const type = params?.type ? params.type : null;
 
   const inputSearchHandler = search => {
-    let params = search && {keyword: search};
-    return getVehicles(params).then(result => {
+    let config = search && {keyword: search};
+    if (location) {
+      config = {...config, ...{location: location}};
+    }
+    if (maxPrice) {
+      config = {...config, ...{max_price: maxPrice}};
+    }
+    if (minPrice) {
+      config = {...config, ...{min_price: minPrice}};
+    }
+    if (type) {
+      config = {...config, ...{filter_by_type: type}};
+    }
+    return getVehicles(config).then(result => {
       console.log(result);
       setNexPage(result.data.result.nextPage);
       return setData(result.data.result.data);
@@ -27,10 +42,28 @@ const Search = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.filterText}>Filter</Text>
+      <Pressable
+        style={styles.header}
+        onPress={() => {
+          navigation.navigate('Filter', {
+            date,
+            location,
+            minPrice,
+            maxPrice,
+            rating,
+            type,
+          });
+        }}>
+        <Text style={styles.filterText}>
+          Filter{location ? ` - ${location}` : ''}
+          {maxPrice ? ` - Rp. ${maxPrice} to ` : ''}
+          {minPrice ? `Rp. ${minPrice}` : ''}
+          {type === 1 && ' - Car'}
+          {type === 2 && ' - Motorcycle'}
+          {type === 3 && ' - Bicycle'}
+        </Text>
         <MaterialIcons name="filter-alt" size={22} color="#3939394D" />
-      </View>
+      </Pressable>
       <View style={styles.searchContainer}>
         <Ionicons name="search" size={20} />
         <TextInput
