@@ -16,6 +16,7 @@ import Payment1 from './src/screens/Payment1/Payment1';
 import Payment2 from './src/screens/Payment2/Payment2';
 import Payment3 from './src/screens/Payment3/Payment3';
 import FinishedPayment from './src/screens/FinishedPayment/FinishedPayment';
+import addItem from './src/screens/addItem/addItem';
 
 const redux = reduxConfig();
 
@@ -74,6 +75,11 @@ const App = () => {
             <StackScreen
               name="FinishedPayment"
               component={FinishedPayment}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="AddItem"
+              component={addItem}
               options={{headerShown: false}}
             />
             <StackScreen

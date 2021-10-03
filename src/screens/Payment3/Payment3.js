@@ -30,7 +30,6 @@ const Payment3 = props => {
   const passedData = route.params.passedData;
 
   useEffect(() => {
-    console.log(auth);
     getTransactionByID(route.params.transactionId || passedData?.id).then(
       ({data}) => {
         const result = data.result;

@@ -8,7 +8,6 @@ export default StyleSheet.create({
   headerImage: {resizeMode: 'cover', height: 280, width: 'auto'},
   titleContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     marginHorizontal: 12,
     marginVertical: 18,
     alignItems: 'center',
@@ -16,8 +15,25 @@ export default StyleSheet.create({
   titleText: {
     fontWeight: '700',
     fontSize: 22,
+    marginRight: 'auto',
   },
   cardContainer: {
     marginBottom: 15,
+  },
+  addBtn: {
+    width: 30,
+    height: 30,
+    backgroundColor: '#FFCD61',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  addTxt: {
+    fontSize: 20,
+    fontWeight: '700',
+  },
+  viewMore: {
+    textDecorationLine: 'underline',
   },
 });

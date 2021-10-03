@@ -116,7 +116,6 @@ const HistoryCard = props => {
         <View style={styles.selectContainer}>
           <RadioButton value={id} color="#FFCD61" />
         </View>
-        {console.log(props)}
       </View>
     );
   }

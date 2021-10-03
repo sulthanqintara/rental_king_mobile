@@ -1,10 +1,90 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, FlatList, Image, TextInput, Pressable} from 'react-native';
+import axios from 'axios';
+import {API_URL} from '@env';
 
-const Search = () => {
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import styles from './SearchStyle';
+import {getVehicles} from '../../utils/https/vehicles';
+
+const Search = ({navigation}) => {
+  const [data, setData] = useState([]);
+  const [nextPage, setNexPage] = useState(null);
+
+  // useEffect(() => {
+  //   setData(prevState => [...prevState, ...dummySearch]);
+  // }, [setData]);
+
+  const inputSearchHandler = search => {
+    let params = search && {keyword: search};
+    return getVehicles(params).then(result => {
+      console.log(result);
+      setNexPage(result.data.result.nextPage);
+      return setData(result.data.result.data);
+    });
+  };
+
   return (
-    <View>
-      <Text>Search</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.filterText}>Filter</Text>
+        <MaterialIcons name="filter-alt" size={22} color="#3939394D" />
+      </View>
+      <View style={styles.searchContainer}>
+        <Ionicons name="search" size={20} />
+        <TextInput
+          placeholder="Search"
+          style={styles.searchInput}
+          onEndEditing={e => {
+            inputSearchHandler(e.nativeEvent.text);
+            console.log('pass');
+          }}
+        />
+      </View>
+      <FlatList
+        data={data}
+        renderItem={({item}) => {
+          const pic = (API_URL + item.picture).split(',')[0];
+          return (
+            <Pressable
+              elevation={3}
+              style={styles.cardContainer}
+              onPress={() => {
+                navigation.navigate('Order', {id: item.id});
+              }}>
+              <Image source={{uri: pic}} style={styles.cardImage} />
+              <View style={styles.cardTextContainer}>
+                <Text style={styles.cardLocation}>
+                  {item.location}, X miles from your location
+                </Text>
+                <View style={styles.cardBottomTextContainer}>
+                  <View style={styles.cardBottomLeftContainer}>
+                    <Text style={styles.cardModel}>{item.model}</Text>
+                    {item.amount_available > 0 ? (
+                      <Text style={styles.available}>Available</Text>
+                    ) : (
+                      <Text style={styles.notAvailable}>Not Available</Text>
+                    )}
+                  </View>
+                  <Text>Rp. {item.price}/day</Text>
+                </View>
+              </View>
+            </Pressable>
+          );
+        }}
+        keyExtractor={(_, index) => index}
+        onEndReached={() => {
+          nextPage !== null &&
+            axios.get(API_URL + nextPage).then(result => {
+              setNexPage(result.data.result.nextPage);
+              return setData(prevState => [
+                ...prevState,
+                ...result.data.result.data,
+              ]);
+            });
+        }}
+      />
     </View>
   );
 };

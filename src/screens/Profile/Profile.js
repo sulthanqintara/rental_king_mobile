@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, Pressable, Image} from 'react-native';
 import {connect} from 'react-redux';
 import {logoutAction} from '../../redux/actionCreators/auth';
+import {API_URL} from '@env';
 import {useSelector} from 'react-redux';
 
 import {removeFew} from '../../utils/asyncStorage';
@@ -24,7 +25,14 @@ const Profile = props => {
   return (
     <>
       <View style={styles.profileHeader}>
-        <Image style={styles.profileImage} source={{uri: auth.profilePic}} />
+        <Image
+          style={styles.profileImage}
+          source={
+            auth.profilePic
+              ? {uri: auth.profilePic}
+              : {uri: API_URL + '/img/profile-icon-png-898.png'}
+          }
+        />
         <Text style={styles.profileHeaderText}>
           {auth.userName ? auth.userName : auth.email}
         </Text>

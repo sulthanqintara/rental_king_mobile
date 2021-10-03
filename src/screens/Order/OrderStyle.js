@@ -99,8 +99,22 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  reserveDisabled: {
+    marginTop: 20,
+    width: 'auto',
+    height: 50,
+    backgroundColor: 'rgba(255, 205, 97, 0.35)',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   reserveTxt: {
     fontSize: 20,
     fontWeight: '700',
   },
+  disabledReseveTxt: {
+    color: 'rgba(0, 0, 0, 0.3)',
+  },
+  availableTxt: {color: '#087E0D', fontWeight: '700', marginBottom: 5},
+  notAvailableTxt: {color: 'red', fontWeight: '700', marginBottom: 5},
 });

@@ -19,7 +19,6 @@ const History = props => {
         ? {user_id: authInfo.user_id}
         : {owner_id: authInfo.user_id};
     getTransaction(params, token).then(data => {
-      // console.log(data.data.result.data);
       setHistoryData(data.data.result.data);
     });
   }, []);
@@ -114,7 +113,6 @@ const History = props => {
             </View>
           </View>
           {historyData?.map(data => {
-            console.log(data.amount_rented);
             if (
               new Date(data.time_posted).getTime() -
                 currentDate +

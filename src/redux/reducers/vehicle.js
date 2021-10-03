@@ -32,7 +32,7 @@ const vehicleReducer = (prevstate = defaultState, action) => {
         isPending: false,
         isFulfilled: true,
         isRejected: false,
-        vehicleData: action.payload.data.result,
+        vehicleData: action.payload.data.result.data,
       };
 
     default:

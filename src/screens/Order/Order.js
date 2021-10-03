@@ -16,6 +16,7 @@ import {API_URL} from '@env';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import imagePlaceholder from '../../assets/img/imagePlaceholder.png';
 import {useSelector} from 'react-redux';
 
 const Order = props => {
@@ -35,7 +36,16 @@ const Order = props => {
   const [open, setOpen] = useState(false);
   const id = route.params.id;
 
-  const currentDate = new Date(ReserveDate);
+  const addDays = (date, days) => {
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  };
+  const formatDate = date => {
+    return (
+      date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+    );
+  };
 
   const onPressHandler = () => {
     const nextData = {
@@ -43,12 +53,8 @@ const Order = props => {
       model_id: id,
       amount_rented: count,
       prepayment: count * price * duration,
-      rent_start_date: `${currentDate.getFullYear()}-${
-        currentDate.getMonth() + 1
-      }-${currentDate.getDate()}`,
-      rent_finish_date: `${currentDate.getFullYear()}-${
-        currentDate.getMonth() + 1
-      }-${currentDate.getDate() + duration}`,
+      rent_start_date: formatDate(addDays(ReserveDate, 0)),
+      rent_finish_date: formatDate(addDays(ReserveDate, duration)),
       vehicleImage: picture,
       model,
       duration,
@@ -68,8 +74,8 @@ const Order = props => {
       .get(url, {
         params: {id: id},
       })
-      .then(({data}) => {
-        const arrayResult = data.result[0];
+      .then(data => {
+        const arrayResult = data.data.result.data[0];
         setAvailable(arrayResult.amount_available);
         setLocation(arrayResult.location);
         setModel(arrayResult.model);
@@ -82,7 +88,9 @@ const Order = props => {
 
   return (
     <ScrollView>
-      <ImageBackground style={styles.header} source={{uri: picture}}>
+      <ImageBackground
+        style={styles.header}
+        source={picture.split(API_URL)[1] ? {uri: picture} : imagePlaceholder}>
         <View style={styles.headerController}>
           <Pressable
             style={styles.back}
@@ -126,7 +134,7 @@ const Order = props => {
         </View>
         <Text style={styles.textPadding}>Max for 2 person</Text>
         <Text style={styles.textPadding}>No prepayment</Text>
-        <Text style={available ? styles.greenTxt : styles.redTxt}>
+        <Text style={available ? styles.availableTxt : styles.notAvailableTxt}>
           {available > 0 ? 'Available' : 'Not Available'}
         </Text>
         <View style={styles.location}>
@@ -200,8 +208,18 @@ const Order = props => {
             }}
           />
         </View>
-        <Pressable style={styles.reserve} onPress={onPressHandler}>
-          <Text style={styles.reserveTxt}>Reservation</Text>
+        <Pressable
+          style={available ? styles.reserve : styles.reserveDisabled}
+          onPress={onPressHandler}
+          disabled={available <= 0 ? true : false}>
+          <Text
+            style={
+              available
+                ? styles.reserveTxt
+                : [styles.reserveTxt, styles.disabledReseveTxt]
+            }>
+            Reservation
+          </Text>
         </Pressable>
       </View>
     </ScrollView>

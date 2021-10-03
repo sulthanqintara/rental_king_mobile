@@ -25,6 +25,4 @@ export const removeFew = async () => {
   } catch (e) {
     // remove error
   }
-
-  console.log('Done');
 };

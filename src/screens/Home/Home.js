@@ -41,7 +41,11 @@ const Home = () => {
         component={HomeContainer}
         options={{headerShown: false}}
       />
-      <Tab.Screen name="Search" component={Search} />
+      <Tab.Screen
+        name="Search"
+        component={Search}
+        options={{headerShown: false}}
+      />
       <Tab.Screen
         name="Chat History"
         component={ChatHistory}

@@ -15,6 +15,8 @@ const HomeContainer = props => {
     let params = {order_by: 'v.popular_stats', sort: 'DESC', limit: '4'};
     props.getVehicle(params);
   };
+  const auth = props.auth.authInfo;
+
   useEffect(() => {
     getPopularVehicleHandler();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,9 +28,18 @@ const HomeContainer = props => {
         <Image style={styles.headerImage} source={headerImage} />
       </View>
       <View style={styles.titleContainer}>
+        {auth.authLevel !== 3 && (
+          <Pressable
+            onPress={() => {
+              props.navigation.navigate('AddItem');
+            }}
+            style={styles.addBtn}>
+            <Text style={styles.addTxt}>+</Text>
+          </Pressable>
+        )}
         <Text style={styles.titleText}>Recommended</Text>
         <Pressable>
-          <Text>View More ></Text>
+          <Text style={styles.viewMore}>View More ></Text>
         </Pressable>
       </View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -44,9 +55,18 @@ const HomeContainer = props => {
         })}
       </ScrollView>
       <View style={styles.titleContainer}>
+        {auth.authLevel !== 3 && (
+          <Pressable
+            onPress={() => {
+              props.navigation.navigate('AddItem');
+            }}
+            style={styles.addBtn}>
+            <Text style={styles.addTxt}>+</Text>
+          </Pressable>
+        )}
         <Text style={styles.titleText}>Hot Deals</Text>
         <Pressable>
-          <Text>View More ></Text>
+          <Text style={styles.viewMore}>View More ></Text>
         </Pressable>
       </View>
       <ScrollView
