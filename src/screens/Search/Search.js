@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, Image, TextInput, Pressable} from 'react-native';
 import axios from 'axios';
 import {API_URL} from '@env';
@@ -11,6 +11,7 @@ import {getVehicles} from '../../utils/https/vehicles';
 const Search = ({navigation, filter, route}) => {
   const [data, setData] = useState([]);
   const [nextPage, setNexPage] = useState(null);
+  const [keyword, setKeyword] = useState(null);
   const params = route.params;
   const date = params?.date ? params.date : null;
   const location = params?.location ? params.location : null;
@@ -21,6 +22,7 @@ const Search = ({navigation, filter, route}) => {
 
   const inputSearchHandler = search => {
     let config = search && {keyword: search};
+    console.log(minPrice);
     if (location) {
       config = {...config, ...{location: location}};
     }
@@ -38,6 +40,13 @@ const Search = ({navigation, filter, route}) => {
       return setData(result.data.result.data);
     });
   };
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      params && inputSearchHandler(params.keyword);
+    });
+    return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -51,6 +60,7 @@ const Search = ({navigation, filter, route}) => {
             maxPrice,
             rating,
             type,
+            keyword,
           });
         }}>
         <Text style={styles.filterText}>
@@ -70,6 +80,7 @@ const Search = ({navigation, filter, route}) => {
           style={styles.searchInput}
           onEndEditing={e => {
             inputSearchHandler(e.nativeEvent.text);
+            setKeyword(e.nativeEvent.text);
           }}
         />
       </View>

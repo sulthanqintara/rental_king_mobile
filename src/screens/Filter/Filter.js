@@ -298,6 +298,7 @@ const Filter = props => {
               maxPrice,
               date,
               type,
+              keyword: passedData.keyword,
             });
           }}>
           <Text style={[styles.bigTxt, styles.applyTxt]}>Apply</Text>
