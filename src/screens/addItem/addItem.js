@@ -70,7 +70,6 @@ const AddItem = ({navigation}) => {
     categoryValue && body.append('type_id', categoryValue);
     body.append('amount_available', amount);
     body.append('owner', authInfo.user_id);
-    console.log(body);
     return addVehicles(body, token)
       .then(() => {
         ToastAndroid.show('Vehicle Saved!', ToastAndroid.SHORT);

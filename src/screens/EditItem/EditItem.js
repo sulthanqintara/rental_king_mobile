@@ -59,7 +59,6 @@ const Order = props => {
     location && body.append('location', location);
     category && body.append('type_id', category);
     body.append('amount_available', count);
-    console.log(body);
     return patchVehicle(body, id, auth.token)
       .then(() => {
         ToastAndroid.show('Vehicle Saved!', ToastAndroid.SHORT);

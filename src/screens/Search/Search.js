@@ -34,7 +34,6 @@ const Search = ({navigation, filter, route}) => {
       config = {...config, ...{filter_by_type: type}};
     }
     return getVehicles(config).then(result => {
-      console.log(result);
       setNexPage(result.data.result.nextPage);
       return setData(result.data.result.data);
     });
@@ -71,7 +70,6 @@ const Search = ({navigation, filter, route}) => {
           style={styles.searchInput}
           onEndEditing={e => {
             inputSearchHandler(e.nativeEvent.text);
-            console.log('pass');
           }}
         />
       </View>

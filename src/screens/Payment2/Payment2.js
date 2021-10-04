@@ -8,11 +8,23 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../Payment1/Payment1Style';
 import styles2 from './Payment2Style';
 import {postTransactions} from '../../utils/https/transactions';
+import PushNotification from 'react-native-push-notification';
 
 const Payment2 = props => {
   const {navigation, route} = props;
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
   const passedData = route.params;
+
+  const notificationHandler = (result, resultModel) => {
+    PushNotification.localNotification({
+      channelId: 'transaction-channel',
+      title: 'Finish Your Payment',
+      bigText: "Let's finish your payment for " + resultModel,
+      message: 'Payment Code : ' + result.payment_code,
+      subText: 'Payment Code : ' + result.payment_code,
+    });
+  };
+
   const paymentCode = (min, max) => {
     min = Math.ceil(11111111);
     max = Math.floor(99999999);
@@ -33,6 +45,7 @@ const Payment2 = props => {
 
     postTransactions(body)
       .then(data => {
+        notificationHandler(body, passedData.model);
         navigation.navigate('Payment3', {
           transactionId: data.data.result,
           duration: passedData.duration,

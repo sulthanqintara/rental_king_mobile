@@ -13,6 +13,7 @@ import styles3 from './Payment3Style';
 import LinearGradient from 'react-native-linear-gradient';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useSelector} from 'react-redux';
+import PushNotification from 'react-native-push-notification';
 
 const Payment3 = props => {
   const {navigation, route} = props;
@@ -25,9 +26,17 @@ const Payment3 = props => {
   const [payBefore, setPayBefore] = useState('');
   const [prepayment, setPrepayment] = useState(null);
   const auth = useSelector(state => state.auth.authInfo);
-
   const duration = route.params.duration;
   const passedData = route.params.passedData;
+
+  const confirmNotification = (result, resultModel) => {
+    PushNotification.localNotification({
+      channelId: 'transaction-channel',
+      title: 'Payment has been Confirmed',
+      message: 'Your payment for ' + model + ' Has been confirmed!',
+      id: route.params.transactionId || passedData?.id,
+    });
+  };
 
   useEffect(() => {
     getTransactionByID(route.params.transactionId || passedData?.id).then(
@@ -41,9 +50,11 @@ const Payment3 = props => {
         setStartDate(new Date(result.rent_start_date).toDateString());
         setFinishDate(new Date(result.rent_finish_date).toDateString());
         setPrepayment(result.prepayment);
-        getVehicles({id: result.model_d})
+        getVehicles({id: result.model_id})
           .then(vehicleData => {
-            setModel(vehicleData.data.result[0].model);
+            console.log(vehicleData);
+            const resultModel = vehicleData.data.result.data[0].model;
+            setModel(resultModel);
           })
           .catch(err => console.log(err));
       },
@@ -68,8 +79,14 @@ const Payment3 = props => {
             id: route.params.transactionId || passedData.id,
             seller_paid_status: 1,
           };
-    patchTransaction(body);
-    props.navigation.navigate('FinishedPayment', {passedData});
+    patchTransaction(body)
+      .then(() => {
+        confirmNotification();
+        props.navigation.navigate('FinishedPayment', {passedData});
+      })
+      .catch(() => {
+        ToastAndroid.show('Payment Failed.', ToastAndroid.SHORT);
+      });
   };
 
   return (
