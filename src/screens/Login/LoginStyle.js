@@ -47,8 +47,8 @@ export default StyleSheet.create({
     fontSize: 18,
   },
   warning: {
-    backgroundColor: 'rgba(252, 3, 3, 0.25)',
-    color: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    color: '#fc2828',
     fontWeight: '700',
     fontSize: 18,
     textAlign: 'center',

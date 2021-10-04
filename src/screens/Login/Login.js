@@ -7,26 +7,39 @@ import {
   Pressable,
   Image,
 } from 'react-native';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form';
 import styles from './LoginStyle';
 
 import imageBackground from '../../assets/img/Login.jpg';
 import googleIcon from '../../assets/img/google.png';
 import {loginAction} from '../../redux/actionCreators/auth';
+import {useState} from 'react';
 
 const Login = props => {
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm({mode: 'onBlur'});
-
+  const auth = useSelector(state => state.auth);
+  const errorLogin = String(auth.error);
+  const [errorMessage, setErrorMessage] = useState(false);
+  const {control, handleSubmit} = useForm({mode: 'onBlur'});
   const onSubmit = data => {
+    if (!data.email || !data.password) {
+      return setErrorMessage('Username and Password are Required');
+    }
+    if (!data.email.includes('@')) {
+      return setErrorMessage('Please input a Valid Email');
+    }
+    if (data.password.length < 6) {
+      return setErrorMessage('Password must have 6 or more characters');
+    }
     const form = new URLSearchParams();
     form.append('email', data.email);
     form.append('password', data.password);
     props.onLogin(form);
+    if (errorLogin.includes('401') === true) {
+      return setErrorMessage('Username and/or Password Are Incorrect');
+    } else {
+      return setErrorMessage('Please check your connection to the server');
+    }
   };
 
   const isInitialMount = useRef(true);
@@ -55,9 +68,6 @@ const Login = props => {
           control={control}
           name="email"
           defaultValue=""
-          rules={{
-            required: true,
-          }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
               autoCompleteType="email"
@@ -73,9 +83,6 @@ const Login = props => {
         <Controller
           control={control}
           name="password"
-          rules={{
-            required: true,
-          }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
               autoCompleteType="password"
@@ -103,13 +110,7 @@ const Login = props => {
           <Image source={googleIcon} style={styles.googleIcon} />
           <Text style={styles.buttonText}>Login with Google</Text>
         </Pressable>
-        {errors.username || errors.password ? (
-          <Text style={styles.warning}>
-            Username and Password are required!
-          </Text>
-        ) : (
-          <Text>{}</Text>
-        )}
+        {errorMessage && <Text style={styles.warning}>{errorMessage}</Text>}
         <View style={styles.signUp}>
           <Text style={styles.whiteText}>Don't have account? </Text>
           <Pressable onPress={() => props.navigation.navigate('Register')}>
