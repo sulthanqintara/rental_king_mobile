@@ -8,8 +8,6 @@ export default StyleSheet.create({
   },
   imageBackground: {
     flex: 1,
-    paddingTop: 30,
-    paddingHorizontal: 29,
     position: 'absolute',
     width: d.width,
     height: d.height,
@@ -66,5 +64,11 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 30,
+  },
+  darken: {
+    backgroundColor: 'rgba(0, 0, 0, .25)',
+    paddingTop: 30,
+    paddingHorizontal: 29,
+    flex: 1,
   },
 });

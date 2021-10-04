@@ -36,7 +36,7 @@ const SignUp = props => {
         style={styles.imageBackground}
         source={imageBackground}
         resizeMode="cover">
-        <ScrollView>
+        <ScrollView style={styles.darken}>
           <Text style={styles.title}>LET’S HAVE{'\n'}SOME RIDE</Text>
           <Controller
             name="email"
