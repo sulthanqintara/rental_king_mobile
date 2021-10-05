@@ -61,6 +61,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     marginTop: 6,
     marginBottom: 22,
+    color: 'black',
   },
   save: {
     width: 'auto',

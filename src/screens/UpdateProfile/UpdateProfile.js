@@ -8,9 +8,12 @@ import {
   TextInput,
   Pressable,
   ToastAndroid,
+  PermissionsAndroid,
+  Platform,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import DatePicker from 'react-native-date-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {profileAction} from '../../redux/actionCreators/auth';
 
 import {RadioButton} from 'react-native-paper';
@@ -18,6 +21,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './UpdateProfileStyle';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ModalComponent from '../../components/Modals/Modal';
+import {API_URL} from '@env';
 
 const UpdateProfile = props => {
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
@@ -31,9 +35,24 @@ const UpdateProfile = props => {
   const [phone, setPhone] = useState(auth.phone);
   const [dob, setDob] = useState(new Date(auth.dob));
   const [address, setAddress] = useState(auth.address);
+  const [picture, setPicture] = useState(
+    auth.profilePic
+      ? API_URL + auth.profilePic
+      : API_URL + '/img/profile-icon-png-898.png',
+  );
+  const [pictureUpload, setPictureUpload] = useState('');
 
   const saveHandler = () => {
     const form = new FormData();
+    pictureUpload !== '' &&
+      form.append('profile_picture', {
+        name: pictureUpload.fileName,
+        type: pictureUpload.type,
+        uri:
+          Platform.OS === 'android'
+            ? pictureUpload.uri
+            : pictureUpload.uri.replace('file://', ''),
+      });
     form.append('gender', gender);
     form.append('name', name);
     form.append('email', email);
@@ -47,6 +66,37 @@ const UpdateProfile = props => {
     ToastAndroid.show('Profile Updated!', ToastAndroid.SHORT);
   };
 
+  const onImagePickHandler = () => {
+    launchImageLibrary({mediaType: 'photo'}, callback => {
+      if (callback.assets) {
+        setPicture(callback.assets[0].uri);
+        setPictureUpload(callback.assets[0]);
+      }
+    });
+  };
+  const onCamPickHandler = () => {
+    launchCamera({mediaType: 'photo', saveToPhotos: true}, callback => {
+      if (callback.assets) {
+        setPictureUpload(callback.assets[0]);
+        setPicture(callback.assets[0].uri);
+      }
+    });
+  };
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        onCamPickHandler();
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
   return (
     <View style={{flex: 1}}>
       <View style={[styles.header, styles.container]}>
@@ -58,17 +108,19 @@ const UpdateProfile = props => {
         </View>
       </View>
       <ScrollView style={styles.container}>
-        <View style={styles.profileContainer}>
+        <Pressable style={styles.profileContainer} onPress={onImagePickHandler}>
           <ImageBackground
             style={styles.profilePic}
-            source={{uri: auth.profilePic}}
+            source={{uri: picture}}
             imageStyle={{borderRadius: 50}}>
-            <View style={styles.profilebtn}>
+            <Pressable
+              style={styles.profilebtn}
+              onPress={requestCameraPermission}>
               {/* <Ionicons name="create-outline" size={20} /> */}
               <MaterialIcons name="edit" size={20} />
-            </View>
+            </Pressable>
           </ImageBackground>
-        </View>
+        </Pressable>
         <RadioButton.Group
           onValueChange={newValue => setGender(newValue)}
           value={gender}>

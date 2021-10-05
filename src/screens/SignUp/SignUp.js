@@ -15,16 +15,31 @@ import imageBackground from '../../assets/img/register.jpg';
 import googleIcon from '../../assets/img/google.png';
 import styles from './SignUpStyle';
 import {postRegister} from '../../utils/https/auth';
+import {useState} from 'react';
 
 const SignUp = props => {
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm({mode: 'onBlur'});
+  const [errorMessage, setErrorMessage] = useState(false);
+  const {control, handleSubmit} = useForm({mode: 'onBlur'});
 
   const onSubmit = data => {
-    postRegister(data).then(() => {
+    if (!data.email || !data.password || !data.phone_number) {
+      return setErrorMessage(
+        'Username, Phone Number, and Password are required',
+      );
+    }
+    if (!data.email.includes('@')) {
+      return setErrorMessage('Please input a Valid Email');
+    }
+    if (data.password.length < 6) {
+      return setErrorMessage('Password must have 6 or more characters');
+    }
+    const send = {
+      email: data.email,
+      password: data.password,
+      phone_number: data.phone_number,
+      auth_level: 3,
+    };
+    postRegister(send).then(() => {
       ToastAndroid.show("Signed Up, Let's Login!", ToastAndroid.SHORT);
       props.navigation.navigate('Login');
     });
@@ -42,9 +57,6 @@ const SignUp = props => {
             name="email"
             control={control}
             defaultValue=""
-            rules={{
-              required: true,
-            }}
             render={({field: {onChange, onBlur, value}}) => (
               <TextInput
                 autoCompleteType="email"
@@ -60,9 +72,6 @@ const SignUp = props => {
           <Controller
             name="phone_number"
             control={control}
-            rules={{
-              required: true,
-            }}
             render={({field: {onChange, onBlur, value}}) => (
               <TextInput
                 autoCompleteType="tel"
@@ -79,9 +88,6 @@ const SignUp = props => {
           <Controller
             name="password"
             control={control}
-            rules={{
-              required: true,
-            }}
             render={({field: {onChange, onBlur, value}}) => (
               <TextInput
                 autoCompleteType="password"
@@ -104,13 +110,7 @@ const SignUp = props => {
             <Image source={googleIcon} style={styles.googleIcon} />
             <Text style={styles.buttonText}>Sign up with Google</Text>
           </Pressable>
-          {errors.username || errors.password || errors.phone_number ? (
-            <Text style={styles.warning}>
-              Username, Phone Number, and Password are required!
-            </Text>
-          ) : (
-            <Text>{}</Text>
-          )}
+          {errorMessage && <Text style={styles.warning}>{errorMessage}</Text>}
           <View style={styles.signUp}>
             <Text style={styles.whiteText}>Already have an account? </Text>
             <Pressable onPress={() => props.navigation.navigate('Login')}>

@@ -3,9 +3,7 @@ import {getData} from '../asyncStorage';
 import {API_URL} from '@env';
 
 export const postLogin = body => {
-  return axios
-    .post(`${API_URL}/auth/login`, body)
-    .catch(err => console.log(err));
+  return axios.post(`${API_URL}/auth/login`, body);
 };
 
 export const postRegister = body => {

@@ -29,7 +29,7 @@ const Profile = props => {
           style={styles.profileImage}
           source={
             auth.profilePic
-              ? {uri: auth.profilePic}
+              ? {uri: API_URL + auth.profilePic}
               : {uri: API_URL + '/img/profile-icon-png-898.png'}
           }
         />

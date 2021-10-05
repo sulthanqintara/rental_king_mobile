@@ -7,7 +7,7 @@ import {
   Pressable,
   Image,
 } from 'react-native';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form';
 import styles from './LoginStyle';
 
@@ -18,8 +18,8 @@ import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const Login = props => {
-  const auth = useSelector(state => state.auth);
-  const errorLogin = String(auth.error);
+  // const auth = useSelector(state => state.auth);
+
   const [errorMessage, setErrorMessage] = useState(false);
   const {control, handleSubmit} = useForm({mode: 'onBlur'});
   const onSubmit = data => {
@@ -36,15 +36,11 @@ const Login = props => {
     form.append('email', data.email);
     form.append('password', data.password);
     props.onLogin(form);
-    if (errorLogin.includes('401') === true) {
-      return setErrorMessage('Username and/or Password Are Incorrect');
-    } else {
-      return setErrorMessage('Please check your connection to the server');
-    }
   };
 
   const isInitialMount = useRef(true);
   useEffect(() => {
+    const errorLogin = String(props.auth.error);
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
@@ -54,9 +50,12 @@ const Login = props => {
           routes: [{name: 'Home'}],
         });
       }
+      if (errorLogin.includes('401') === true) {
+        return setErrorMessage('Username and/or Password Are Incorrect');
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.auth.isLogin]);
+  }, [props.auth.isLogin, props.auth.error]);
 
   return (
     <View style={styles.container}>
