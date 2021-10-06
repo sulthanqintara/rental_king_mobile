@@ -46,7 +46,7 @@ const AddItem = ({navigation}) => {
     {label: 'Bicycle', value: 3},
   ]);
   const [picture, setPicture] = useState('');
-  const [pictureUpload, setPictureUpload] = useState('');
+  const [pictureUpload, setPictureUpload] = useState({});
   const [model, setModel] = useState('');
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState('');
@@ -54,7 +54,8 @@ const AddItem = ({navigation}) => {
 
   const nextHandler = () => {
     const body = new FormData();
-    pictureUpload !== '' &&
+    console.log('picture', pictureUpload);
+    pictureUpload?.fileName &&
       body.append('picture', {
         name: pictureUpload.fileName,
         type: pictureUpload.type,
@@ -70,6 +71,8 @@ const AddItem = ({navigation}) => {
     categoryValue && body.append('type_id', categoryValue);
     body.append('amount_available', amount);
     body.append('owner', authInfo.user_id);
+    // const field = body.getParts().find(item => item.fieldName === 'picture');
+    // console.log(field);
     return addVehicles(body, token)
       .then(() => {
         ToastAndroid.show('Vehicle Saved!', ToastAndroid.SHORT);

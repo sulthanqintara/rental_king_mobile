@@ -18,7 +18,6 @@ export default StyleSheet.create({
     marginLeft: 20,
   },
   header: {
-    justifyContent: 'center',
     alignItems: 'center',
     elevation: 10,
     paddingBottom: 10,

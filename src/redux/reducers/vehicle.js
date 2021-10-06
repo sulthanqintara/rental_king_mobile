@@ -5,7 +5,6 @@ const defaultState = {
   isPending: false,
   isFulfilled: false,
   isRejected: false,
-  isLogin: false,
 };
 
 const vehicleReducer = (prevstate = defaultState, action) => {

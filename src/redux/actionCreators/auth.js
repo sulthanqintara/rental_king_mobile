@@ -1,5 +1,5 @@
 import {deleteLogout, postLogin} from '../../utils/https/auth';
-import {patchProfile} from '../../utils/https/profile';
+import {patchProfile} from '../../utils/https/user';
 
 export const loginAction = body => {
   return {type: 'SIGN_IN', payload: postLogin(body)};

@@ -7,7 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../Payment1/Payment1Style';
 import styles2 from './Payment2Style';
-import {postTransactions} from '../../utils/https/transactions';
+import {postTransactions} from '../../../utils/https/transactions';
 import PushNotification from 'react-native-push-notification';
 
 const Payment2 = props => {

@@ -75,6 +75,16 @@ const Profile = props => {
               color="#999999"
             />
           </Pressable>
+          <Pressable
+            style={styles.profileOption}
+            onPress={() => props.navigation.navigate('UpdatePassword')}>
+            <Text style={styles.profileOptionText}>Update Password</Text>
+            <Ionicons
+              name="chevron-forward-outline"
+              size={20}
+              color="#999999"
+            />
+          </Pressable>
         </View>
         <LogoutModal
           modalVisible={modalVisible}

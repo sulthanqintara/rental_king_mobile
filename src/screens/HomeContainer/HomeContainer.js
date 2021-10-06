@@ -21,7 +21,6 @@ const HomeContainer = props => {
     getPopularVehicleHandler();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <ScrollView style={styles.container}>
       <View>

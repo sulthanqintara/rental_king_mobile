@@ -22,7 +22,7 @@ const Search = ({navigation, filter, route}) => {
 
   const inputSearchHandler = search => {
     let config = search && {keyword: search};
-    console.log(minPrice);
+    console.log(location);
     if (location) {
       config = {...config, ...{location: location}};
     }
@@ -46,8 +46,7 @@ const Search = ({navigation, filter, route}) => {
     });
     return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation]);
-
+  }, [params]);
   return (
     <View style={styles.container}>
       <Pressable

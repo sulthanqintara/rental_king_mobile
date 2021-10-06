@@ -4,8 +4,8 @@ import {View, Text, Pressable, ScrollView, ToastAndroid} from 'react-native';
 import {
   getTransactionByID,
   patchTransaction,
-} from '../../utils/https/transactions';
-import {getVehicles} from '../../utils/https/vehicles';
+} from '../../../utils/https/transactions';
+import {getVehicles} from '../../../utils/https/vehicles';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../Payment1/Payment1Style';
@@ -52,7 +52,6 @@ const Payment3 = props => {
         setPrepayment(result.prepayment);
         getVehicles({id: result.model_id})
           .then(vehicleData => {
-            console.log(vehicleData);
             const resultModel = vehicleData.data.result.data[0].model;
             setModel(resultModel);
           })

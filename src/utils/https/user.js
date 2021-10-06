@@ -11,3 +11,8 @@ export const patchProfile = (body, params) => {
       .catch(err => console.log(err)),
   );
 };
+export const updatePassword = (body, params, token) => {
+  return axios.patch(`${API_URL}/users/password/${params}`, body, {
+    headers: {'x-access-token': `Bearer ${token}`},
+  });
+};

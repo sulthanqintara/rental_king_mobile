@@ -8,17 +8,18 @@ import Home from './src/screens/Home/Home';
 import Login from './src/screens/Login/Login';
 import SignUp from './src/screens/SignUp/SignUp';
 import ForgotPassword from './src/screens/ForgotPassword/ForgotPassword';
-import UpdateProfile from './src/screens/UpdateProfile/UpdateProfile';
+import UpdateProfile from './src/screens/Profile/UpdateProfile';
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
 import Order from './src/screens/Order/Order';
 import {PersistGate} from 'redux-persist/integration/react';
-import Payment1 from './src/screens/Payment1/Payment1';
-import Payment2 from './src/screens/Payment2/Payment2';
-import Payment3 from './src/screens/Payment3/Payment3';
+import Payment1 from './src/screens/Payment/Payment1/Payment1';
+import Payment2 from './src/screens/Payment/Payment2/Payment2';
+import Payment3 from './src/screens/Payment/Payment3/Payment3';
 import FinishedPayment from './src/screens/FinishedPayment/FinishedPayment';
 import AddItem from './src/screens/addItem/AddItem';
 import Filter from './src/screens/Filter/Filter';
 import EditItem from './src/screens/EditItem/EditItem';
+import UpdatePassword from './src/screens/Profile/UpdatePassword';
 
 const redux = reduxConfig();
 
@@ -52,6 +53,11 @@ const App = () => {
             <StackScreen
               name="UpdateProfile"
               component={UpdateProfile}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="UpdatePassword"
+              component={UpdatePassword}
               options={{headerShown: false}}
             />
             <StackScreen
