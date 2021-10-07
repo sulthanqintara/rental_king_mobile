@@ -15,3 +15,9 @@ export const deleteLogout = () => {
     axios.delete(`${API_URL}/auth/logout`, {token: token}),
   );
 };
+
+export const getPatchToken = token => {
+  return axios.get(`${API_URL}/auth/check`, {
+    headers: {'x-access-token': `Bearer ${token}`},
+  });
+};

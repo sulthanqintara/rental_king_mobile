@@ -16,3 +16,13 @@ export const updatePassword = (body, params, token) => {
     headers: {'x-access-token': `Bearer ${token}`},
   });
 };
+
+export const postForgotPasswordCode = body => {
+  return axios.post(`${API_URL}/users/forgot_password`, body);
+};
+export const checkForgotPasswordCode = body => {
+  return axios.post(`${API_URL}/users/forgot_password/check`, body);
+};
+export const patchForgotPassword = body => {
+  return axios.patch(`${API_URL}/users/forgot_password/change`, body);
+};

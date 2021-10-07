@@ -1,54 +1,54 @@
 import React, {useState} from 'react';
-import {Controller, useForm} from 'react-hook-form';
+import styles from './ForgotPasswordStyle';
 import {
   View,
   Text,
-  ImageBackground,
-  Pressable,
   TextInput,
+  Pressable,
+  ImageBackground,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
+import {Controller, useForm} from 'react-hook-form';
 
-import styles from './ForgotPasswordStyle';
 import Icon from 'react-native-vector-icons/Ionicons';
 import imageBackground from '../../assets/img/forgot.jpg';
-import {postForgotPasswordCode} from '../../utils/https/user';
+import {
+  checkForgotPasswordCode,
+  postForgotPasswordCode,
+} from '../../utils/https/user';
 
-const ForgotPassword = props => {
+const ForgotPasswordCode = props => {
+  const params = props.route.params;
   const {control, handleSubmit} = useForm({mode: 'onBlur'});
-
   const [errorMessage, setErrorMessage] = useState(false);
 
   const onSubmit = data => {
-    if (data.email === '') {
-      return setErrorMessage('Please insert your email');
+    if (data.code.length < 6) {
+      return setErrorMessage('Code must be 6 numbers');
     }
-    if (!data.email.includes('@')) {
-      return setErrorMessage('Please input a valid email');
-    }
+    const body = {email: params.email, code: Number(data.code)};
     setErrorMessage(false);
-    const body = {email: data.email};
-    return postForgotPasswordCode(body)
+    checkForgotPasswordCode(body)
       .then(() => {
-        setErrorMessage(false);
-        return props.navigation.navigate('ForgotCode', {email: data.email});
+        props.navigation.navigate('NewPassword', {
+          email: params.email,
+          code: data.code,
+        });
       })
       .catch(err => {
+        console.log(err);
         const errString = String(err);
         if (errString.includes('404')) {
-          setErrorMessage('Email not found!');
+          setErrorMessage('Code is invalid');
         }
       });
   };
-  const onAlreadySent = data => {
-    if (data.email === '') {
-      return setErrorMessage('Please insert your email');
-    }
-    if (!data.email.includes('@')) {
-      return setErrorMessage('Please input a valid email');
-    }
-    setErrorMessage(false);
-    return props.navigation.navigate('ForgotCode', {email: data.email});
+  const onResend = () => {
+    const body = {email: params.email};
+    postForgotPasswordCode(body).then(() =>
+      ToastAndroid.show('Code resent!', ToastAndroid.SHORT),
+    );
   };
 
   return (
@@ -69,33 +69,35 @@ const ForgotPassword = props => {
           </View>
           <Text style={styles.title}>THAT'S OKAY, WE GOT YOUR BACK</Text>
           <Text style={styles.whiteText}>
-            Enter your email to get reset password code
+            We've sent you an e-mail for code!
+          </Text>
+          <Text style={styles.whiteText}>
+            Check your email for code to reset your password.
           </Text>
           <Controller
             control={control}
-            name="email"
+            name="code"
             defaultValue=""
             render={({field: {onChange, onBlur, value}}) => (
               <TextInput
-                autoCompleteType="email"
                 style={styles.input}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                placeholder="Enter your email adress"
+                placeholder="Enter your code"
                 placeholderTextColor="white"
+                keyboardType="number-pad"
+                maxLength={6}
               />
             )}
           />
           <Pressable
             style={[styles.button, styles.yellowButton]}
             onPress={handleSubmit(onSubmit)}>
-            <Text style={styles.buttonText}>Send Code</Text>
+            <Text style={styles.buttonText}>Check Code</Text>
           </Pressable>
-          <Pressable
-            style={styles.button}
-            onPress={handleSubmit(onAlreadySent)}>
-            <Text style={styles.buttonText}>I already have the code</Text>
+          <Pressable style={styles.button} onPress={handleSubmit(onResend)}>
+            <Text style={styles.buttonText}>Resend Code</Text>
           </Pressable>
           {errorMessage ? (
             <Text style={styles.warning}>{errorMessage}</Text>
@@ -108,4 +110,4 @@ const ForgotPassword = props => {
   );
 };
 
-export default ForgotPassword;
+export default ForgotPasswordCode;

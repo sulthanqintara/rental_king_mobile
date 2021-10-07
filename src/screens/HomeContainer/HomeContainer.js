@@ -1,25 +1,28 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, Image} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import {logoutAction} from '../../redux/actionCreators/auth';
-import {getVehiclesAction} from '../../redux/actionCreators/vehicles';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 
 import styles from './HomeContainerStyle';
 import headerImage from '../../assets/img/home.jpg';
 import HomeCard from '../../components/HomeCard/HomeCard';
+import {getVehicles} from '../../utils/https/vehicles';
 
 const HomeContainer = props => {
+  const [vehicleData, setVehicleData] = useState([]);
+
   const getPopularVehicleHandler = () => {
     let params = {order_by: 'v.popular_stats', sort: 'DESC', limit: '4'};
-    props.getVehicle(params);
+    getVehicles(params).then(data => {
+      setVehicleData(data.data.result.data);
+    });
   };
-  const auth = props.auth.authInfo;
+  const auth = useSelector(reduxState => reduxState.auth.authInfo);
 
   useEffect(() => {
     getPopularVehicleHandler();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <ScrollView style={styles.container}>
@@ -42,7 +45,7 @@ const HomeContainer = props => {
         </Pressable>
       </View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        {props.vehicle.vehicleData?.map((vehicle, idx) => {
+        {vehicleData?.map((vehicle, idx) => {
           return (
             <HomeCard
               {...props}
@@ -72,7 +75,7 @@ const HomeContainer = props => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         style={styles.cardContainer}>
-        {props.vehicle.vehicleData?.map((vehicle, idx) => {
+        {vehicleData?.map((vehicle, idx) => {
           return (
             <HomeCard
               {...props}
@@ -97,9 +100,6 @@ const mapDispatchToProps = dispatch => {
   return {
     onLogout: body => {
       dispatch(logoutAction(body));
-    },
-    getVehicle: params => {
-      dispatch(getVehiclesAction(params));
     },
   };
 };

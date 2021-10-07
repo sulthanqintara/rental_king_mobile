@@ -19,6 +19,13 @@ export default StyleSheet.create({
     marginBottom: 170,
     textAlign: 'center',
   },
+  titleAlt: {
+    fontFamily: 'Roboto-Black',
+    color: 'white',
+    fontSize: 36,
+    marginBottom: 75,
+    textAlign: 'center',
+  },
   input: {
     width: 'auto',
     height: 50,
@@ -66,7 +73,7 @@ export default StyleSheet.create({
     marginBottom: 30,
   },
   darken: {
-    backgroundColor: 'rgba(0, 0, 0, .25)',
+    backgroundColor: 'rgba(0, 0, 0, .5)',
     paddingTop: 30,
     paddingHorizontal: 29,
     flex: 1,

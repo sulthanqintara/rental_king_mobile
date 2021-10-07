@@ -102,7 +102,7 @@ const Profile = props => {
   );
 };
 
-const mapStateToProps = ({auth, vehicle}) => {
+const mapStateToProps = ({auth}) => {
   return {
     auth,
   };

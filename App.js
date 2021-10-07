@@ -20,6 +20,8 @@ import AddItem from './src/screens/addItem/AddItem';
 import Filter from './src/screens/Filter/Filter';
 import EditItem from './src/screens/EditItem/EditItem';
 import UpdatePassword from './src/screens/Profile/UpdatePassword';
+import ForgotPasswordCode from './src/screens/ForgotPassword/ForgotPasswordCode';
+import NewPassword from './src/screens/ForgotPassword/NewPassword';
 
 const redux = reduxConfig();
 
@@ -48,6 +50,16 @@ const App = () => {
             <StackScreen
               name="Forgot"
               component={ForgotPassword}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="ForgotCode"
+              component={ForgotPasswordCode}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="NewPassword"
+              component={NewPassword}
               options={{headerShown: false}}
             />
             <StackScreen
