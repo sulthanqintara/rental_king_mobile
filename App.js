@@ -22,6 +22,7 @@ import EditItem from './src/screens/EditItem/EditItem';
 import UpdatePassword from './src/screens/Profile/UpdatePassword';
 import ForgotPasswordCode from './src/screens/ForgotPassword/ForgotPasswordCode';
 import NewPassword from './src/screens/ForgotPassword/NewPassword';
+import ViewMore from './src/screens/ViewMore/ViewMore';
 
 const redux = reduxConfig();
 
@@ -110,6 +111,11 @@ const App = () => {
             <StackScreen
               name="EditItem"
               component={EditItem}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="ViewMore"
+              component={ViewMore}
               options={{headerShown: false}}
             />
             <StackScreen

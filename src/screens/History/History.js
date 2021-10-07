@@ -45,23 +45,26 @@ const History = props => {
                 1 * 24 * 60 * 60 * 1000 >
               0
             ) {
+              console.log(data);
               return (
-                <HistoryCard
-                  key={data.id}
-                  id={data.id}
-                  vehicleName={data.model}
-                  rentStart={new Date(data.rent_start_date)}
-                  rentFinish={new Date(data.rent_finish_date)}
-                  price={data.prepayment}
-                  returned={data.returned_status}
-                  userPaid={data.user_paid_status}
-                  sellerPaid={data.seller_paid_status}
-                  vehiclePic={data.picture}
-                  authLevel={authInfo.authLevel}
-                  amountRented={data.amount_rented}
-                  idCard={data.id_card}
-                  {...props}
-                />
+                <>
+                  <HistoryCard
+                    key={data.id}
+                    id={data.id}
+                    vehicleName={data.model}
+                    rentStart={new Date(data.rent_start_date)}
+                    rentFinish={new Date(data.rent_finish_date)}
+                    price={data.prepayment}
+                    returned={data.returned_status}
+                    userPaid={data.user_paid_status}
+                    sellerPaid={data.seller_paid_status}
+                    authLevel={authInfo.authLevel}
+                    amountRented={data.amount_rented}
+                    idCard={data.id_card}
+                    vehiclePic={data.picture}
+                    {...props}
+                  />
+                </>
               );
             }
           })}

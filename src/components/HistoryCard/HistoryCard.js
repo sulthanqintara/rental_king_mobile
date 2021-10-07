@@ -42,6 +42,7 @@ const HistoryCard = props => {
     idCard,
     prepayment: price,
   };
+  console.log('data user', userPaid, sellerPaid, authLevel);
   if (!userPaid && authLevel === 3) {
     return (
       <View style={styles.contentContainer}>
@@ -53,6 +54,27 @@ const HistoryCard = props => {
           <View style={styles.cardContainer}>
             <Text style={styles.textHeight}>
               Please finish your payment for {vehicleName}
+            </Text>
+          </View>
+        </Pressable>
+        <View style={styles.selectContainer}>
+          <Ionicons name="chevron-forward" size={25} color="gray" />
+        </View>
+      </View>
+    );
+  }
+  if (userPaid === 1 && authLevel === 3 && sellerPaid !== 1) {
+    return (
+      <View style={styles.contentContainer}>
+        {console.log(props)}
+        <Pressable
+          style={styles.leftContainer}
+          onPress={() => {
+            // navigation.navigate('Payment3', {passedData});
+          }}>
+          <View style={styles.cardContainer}>
+            <Text style={styles.textHeight}>
+              Waiting for approval for {vehicleName} from seller
             </Text>
           </View>
         </Pressable>
