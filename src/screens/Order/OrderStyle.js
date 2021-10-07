@@ -123,4 +123,18 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgb(255, 255, 255)',
   },
+  countModalContainer: {backgroundColor: 'rgba(0, 0, 0, 0.5)'},
+  countModal: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 10,
+  },
+  countModalButton: {
+    backgroundColor: '#2196F3',
+    alignItems: 'center',
+    padding: 5,
+    borderRadius: 10,
+    marginTop: 20,
+  },
 });

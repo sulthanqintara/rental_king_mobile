@@ -37,6 +37,7 @@ const Order = props => {
   const [ReserveDate, setReserveDate] = useState('Select Date');
   const [owner, setOwner] = useState(null);
   const [visible, setVisible] = useState(true);
+  const [countModalVisible, setCountModalVisible] = useState(false);
 
   const [open, setOpen] = useState(false);
   const id = route.params.id;
@@ -109,6 +110,26 @@ const Order = props => {
           <ActivityIndicator animating={true} color={Colors.red800} />
         </View>
       </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={countModalVisible}
+        onRequestClose={() => {
+          setCountModalVisible(true);
+        }}>
+        <View style={[styles.centeredView, styles.countModalContainer]}>
+          <View style={styles.countModal}>
+            <Text>Maximum {category}(s) reached!</Text>
+            <Pressable
+              style={styles.countModalButton}
+              onPress={() => {
+                setCountModalVisible(false);
+              }}>
+              <Text>OK</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <ImageBackground
         style={styles.header}
         source={
@@ -161,6 +182,7 @@ const Order = props => {
         </View>
         <Text style={styles.textPadding}>Max for 2 person</Text>
         <Text style={styles.textPadding}>No prepayment</Text>
+        <Text style={styles.textPadding}>Stock : {available}</Text>
         <Text style={available ? styles.availableTxt : styles.notAvailableTxt}>
           {available > 0 ? 'Available' : 'Not Available'}
         </Text>
@@ -186,7 +208,12 @@ const Order = props => {
             </Pressable>
             <Text style={styles.amount}> {count} </Text>
             <Pressable
-              onPress={() => count < available && setCount(count + 1)}
+              onPress={() => {
+                count < available && setCount(count + 1);
+                if (count === available) {
+                  setCountModalVisible(!countModalVisible);
+                }
+              }}
               style={styles.counterBtn}>
               <Text style={styles.selectorTitle}>+</Text>
             </Pressable>
