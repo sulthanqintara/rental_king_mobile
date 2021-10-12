@@ -42,7 +42,6 @@ const HistoryCard = props => {
     idCard,
     prepayment: price,
   };
-  console.log('data user', userPaid, sellerPaid, authLevel);
   if (!userPaid && authLevel === 3) {
     return (
       <View style={styles.contentContainer}>
@@ -66,7 +65,6 @@ const HistoryCard = props => {
   if (userPaid === 1 && authLevel === 3 && sellerPaid !== 1) {
     return (
       <View style={styles.contentContainer}>
-        {console.log(props)}
         <Pressable
           style={styles.leftContainer}
           onPress={() => {

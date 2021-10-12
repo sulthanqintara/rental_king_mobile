@@ -14,7 +14,6 @@ const ViewMore = props => {
   const type = route.params.type;
 
   const viewMoreHandler = () => {
-    console.log('pass');
     let config = {order_by: 'v.popular_stats', sort: 'DESC', limit: '4'};
     if (type === 'car') {
       config = {...config, ...{filter_by_type: '1'}};
@@ -25,10 +24,7 @@ const ViewMore = props => {
     if (type === 'bike') {
       config = {...config, ...{filter_by_type: '3'}};
     }
-    console.log('get');
     return getVehicles(config).then(result => {
-      console.log(result);
-      console.log(result.data.result.nextPage);
       setNexPage(result.data.result.nextPage);
       return setData(result.data.result.data);
     });

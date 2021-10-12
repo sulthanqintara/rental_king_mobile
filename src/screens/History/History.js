@@ -45,7 +45,6 @@ const History = props => {
                 1 * 24 * 60 * 60 * 1000 >
               0
             ) {
-              console.log(data);
               return (
                 <>
                   <HistoryCard

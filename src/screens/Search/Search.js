@@ -22,7 +22,6 @@ const Search = ({navigation, filter, route}) => {
 
   const inputSearchHandler = search => {
     let config = search && {keyword: search};
-    console.log(location);
     if (location) {
       config = {...config, ...{location: location}};
     }

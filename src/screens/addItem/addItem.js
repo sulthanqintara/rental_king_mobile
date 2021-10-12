@@ -54,7 +54,6 @@ const AddItem = ({navigation}) => {
 
   const nextHandler = () => {
     const body = new FormData();
-    console.log('picture', pictureUpload);
     pictureUpload?.fileName &&
       body.append('picture', {
         name: pictureUpload.fileName,
@@ -71,8 +70,6 @@ const AddItem = ({navigation}) => {
     categoryValue && body.append('type_id', categoryValue);
     body.append('amount_available', amount);
     body.append('owner', authInfo.user_id);
-    // const field = body.getParts().find(item => item.fieldName === 'picture');
-    // console.log(field);
     return addVehicles(body, token)
       .then(() => {
         ToastAndroid.show('Vehicle Saved!', ToastAndroid.SHORT);

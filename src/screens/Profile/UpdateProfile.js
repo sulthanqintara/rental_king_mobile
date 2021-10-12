@@ -25,7 +25,6 @@ import {API_URL} from '@env';
 
 const UpdateProfile = props => {
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
-  const vehicle = useSelector(reduxState => reduxState.vehicle);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -100,7 +99,6 @@ const UpdateProfile = props => {
 
   return (
     <View style={{flex: 1}}>
-      {console.log(vehicle)}
       <View style={[styles.header, styles.container]}>
         <View style={styles.title}>
           <Pressable onPress={() => props.navigation.goBack()}>

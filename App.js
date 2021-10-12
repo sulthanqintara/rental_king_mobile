@@ -23,6 +23,7 @@ import UpdatePassword from './src/screens/Profile/UpdatePassword';
 import ForgotPasswordCode from './src/screens/ForgotPassword/ForgotPasswordCode';
 import NewPassword from './src/screens/ForgotPassword/NewPassword';
 import ViewMore from './src/screens/ViewMore/ViewMore';
+import ChatRoom from './src/screens/Chat/ChatRoom';
 
 const redux = reduxConfig();
 
@@ -71,6 +72,11 @@ const App = () => {
             <StackScreen
               name="UpdatePassword"
               component={UpdatePassword}
+              options={{headerShown: false}}
+            />
+            <StackScreen
+              name="ChatRoom"
+              component={ChatRoom}
               options={{headerShown: false}}
             />
             <StackScreen

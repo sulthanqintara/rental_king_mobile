@@ -43,7 +43,6 @@ const UpdatePassword = props => {
       })
       .catch(err => {
         const stringError = String(err);
-        console.log(stringError);
         if (stringError.includes('403')) {
           return setErrorMessage(
             "Your old password doesn't match with current password!",

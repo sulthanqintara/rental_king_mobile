@@ -27,7 +27,6 @@ const ForgotPasswordCode = props => {
   const [errorMessage, setErrorMessage] = useState(false);
 
   const nextHandler = data => {
-    console.log(data);
     if (data.password !== data.confirmPassword) {
       return setErrorMessage("Password Didn't Match");
     }
