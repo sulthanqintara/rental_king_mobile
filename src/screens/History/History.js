@@ -21,6 +21,12 @@ const History = props => {
     getTransaction(params, token).then(data => {
       setHistoryData(data.data.result.data);
     });
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getTransaction(params, token).then(data => {
+        setHistoryData(data.data.result.data);
+      });
+      return unsubscribe;
+    });
   }, []);
   const currentDate = new Date().getTime();
 
