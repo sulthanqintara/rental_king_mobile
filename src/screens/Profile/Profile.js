@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {logoutAction} from '../../redux/actionCreators/auth';
 import {API_URL} from '@env';
 import {useSelector} from 'react-redux';
+import socket from '../../components/Socket/SocketIo';
 
 import {removeFew} from '../../utils/asyncStorage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -11,17 +12,20 @@ import styles from './ProfileStyle';
 import LogoutModal from '../../components/Modals/Modal';
 
 const Profile = props => {
+  const auth = useSelector(reduxState => reduxState.auth.authInfo);
   const [modalVisible, setModalVisible] = useState(false);
   const LogoutHandler = async () => {
     await props.onLogout();
     removeFew();
-    props.navigation.reset({
-      index: 0,
-      routes: [{name: 'Login'}],
-    });
+    socket.off(auth.user_id);
+    setTimeout(() => {
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: 'Login'}],
+      });
+    }, 10);
   };
 
-  const auth = useSelector(reduxState => reduxState.auth.authInfo);
   return (
     <>
       <View style={styles.profileHeader}>

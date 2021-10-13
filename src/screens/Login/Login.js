@@ -7,7 +7,7 @@ import {
   Pressable,
   Image,
 } from 'react-native';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form';
 import styles from './LoginStyle';
 import socket from '../../components/Socket/SocketIo';
@@ -17,9 +17,10 @@ import googleIcon from '../../assets/img/google.png';
 import {loginAction} from '../../redux/actionCreators/auth';
 import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
+import PushNotification from 'react-native-push-notification';
 
 const Login = props => {
-  // const auth = useSelector(state => state.auth);
+  const auth = useSelector(reduxState => reduxState.auth);
 
   const [errorMessage, setErrorMessage] = useState(false);
   const {control, handleSubmit} = useForm({mode: 'onBlur'});
@@ -46,8 +47,13 @@ const Login = props => {
       isInitialMount.current = false;
     } else {
       if (props.auth.isLogin) {
-        socket.on('connect', () => {
-          console.log(socket.id);
+        socket.on('connect');
+        socket.on(auth.authInfo.user_id, data => {
+          PushNotification.localNotification({
+            channelId: 'transaction-channel',
+            title: 'Chat from ' + data.senderName,
+            message: data.message,
+          });
         });
         props.navigation.reset({
           index: 0,
