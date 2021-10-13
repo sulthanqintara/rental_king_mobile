@@ -22,7 +22,6 @@ export default StyleSheet.create({
   },
   chatContainer: {
     paddingHorizontal: 18,
-    paddingTop: 18,
   },
   messageContainer: {
     flexDirection: 'row',

@@ -2,18 +2,26 @@ import React, {useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {useSelector} from 'react-redux';
 import PushNotification from 'react-native-push-notification';
+import {io} from 'socket.io-client';
+import {API_URL} from '@env';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './SplashScreenStyle';
 import {getPatchToken} from '../../utils/https/auth';
+// import socket from '../../components/Socket/SocketIo';
 
 const SplashScreen = ({navigation}) => {
   const auth = useSelector(reduxState => reduxState.auth);
+  const socket = io(API_URL);
 
   const createChannel = () => {
     PushNotification.createChannel({
       channelId: 'transaction-channel',
       channelName: 'Transaction',
+    });
+    PushNotification.createChannel({
+      channelId: 'chat-channel',
+      channelName: 'Chat',
     });
   };
 
@@ -24,6 +32,17 @@ const SplashScreen = ({navigation}) => {
         ? setTimeout(() => {
             getPatchToken(auth.token)
               .then(() => {
+                socket.on('connect', () => {
+                  console.log('[DEBUG splash]', socket.id);
+                });
+                socket.on(auth.authInfo.user_id, data => {
+                  console.log('[DEBUG] reply', data);
+                  PushNotification.localNotification({
+                    channelId: 'transaction-channel',
+                    title: 'Chat from ' + data.senderName,
+                    message: data.message,
+                  });
+                });
                 navigation.replace('Home');
               })
               .catch(err => {

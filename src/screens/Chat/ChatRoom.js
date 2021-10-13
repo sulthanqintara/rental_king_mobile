@@ -1,17 +1,16 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View, Text, Pressable, ScrollView} from 'react-native';
-import {io} from 'socket.io-client';
-import {API_URL} from '@env';
 import styles from './ChatRoomStyle';
+import socket from '../../components/Socket/SocketIo';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ChatRoomCard from '../../components/ChatRoomCard/ChatRoomCard';
-import {getChat} from '../../utils/https/chat';
+import {getChat, postChat} from '../../utils/https/chat';
 import {useSelector} from 'react-redux';
 import {TextInput} from 'react-native-gesture-handler';
 
 const ChatRoom = props => {
-  const socket = useMemo(() => io(API_URL), []);
+  const scrollViewRef = useRef();
   const auth = useSelector(state => state.auth);
   const [chatData, setChatData] = useState([]);
   const [message, setMessage] = useState('');
@@ -20,7 +19,7 @@ const ChatRoom = props => {
       sender_id: auth.authInfo.user_id,
       receiver_id: props.route.params.receiverId,
     };
-    getChat(params, auth.token)
+    return getChat(params, auth.token)
       .then(data => {
         setChatData(data.data.result);
       })
@@ -28,16 +27,25 @@ const ChatRoom = props => {
   };
 
   const onSendHandler = () => {
-    if (socket) {
-      socket.emit('send_form', message, response => {
-        console.log(response.status);
-      });
+    const body = {
+      user_id_sender: auth.authInfo.user_id,
+      user_id_receiver: props.route.params.receiverId,
+      message,
+    };
+    return postChat(body, auth.token).then(() => {
+      getChatHandler();
       return setMessage('');
-    }
+    });
   };
 
   useEffect(() => {
     getChatHandler();
+    socket.on(auth.authInfo.user_id, data => {
+      getChatHandler();
+    });
+    return () => {
+      socket.off(auth.authInfo.user_id);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -51,7 +59,12 @@ const ChatRoom = props => {
           <Text style={styles.titleTxt}>Chat Room</Text>
         </View>
       </View>
-      <ScrollView style={styles.chatContainer}>
+      <ScrollView
+        ref={scrollViewRef}
+        onContentSizeChange={() =>
+          scrollViewRef.current.scrollToEnd({animated: true})
+        }
+        style={styles.chatContainer}>
         {chatData?.map(chat => {
           return (
             <ChatRoomCard

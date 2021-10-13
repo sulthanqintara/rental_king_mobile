@@ -10,6 +10,7 @@ import {
 import {connect} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form';
 import styles from './LoginStyle';
+import socket from '../../components/Socket/SocketIo';
 
 import imageBackground from '../../assets/img/Login.jpg';
 import googleIcon from '../../assets/img/google.png';
@@ -45,6 +46,9 @@ const Login = props => {
       isInitialMount.current = false;
     } else {
       if (props.auth.isLogin) {
+        socket.on('connect', () => {
+          console.log(socket.id);
+        });
         props.navigation.reset({
           index: 0,
           routes: [{name: 'Home'}],

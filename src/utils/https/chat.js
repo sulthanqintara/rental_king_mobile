@@ -7,7 +7,6 @@ export const postChat = (body, token) => {
   });
 };
 export const getChat = (params, token) => {
-  console.log(token);
   return axios.get(`${API_URL}/chat`, {
     params,
     headers: {'x-access-token': `Bearer ${token}`},
