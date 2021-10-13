@@ -33,8 +33,15 @@ const SplashScreen = ({navigation}) => {
                 socket.on('connect');
                 socket.on(auth.authInfo.user_id, data => {
                   PushNotification.localNotification({
-                    channelId: 'transaction-channel',
+                    channelId: 'chat-channel',
                     title: 'Chat from ' + data.senderName,
+                    message: data.message,
+                  });
+                });
+                socket.on(`transaction_${auth.authInfo.user_id}`, data => {
+                  PushNotification.localNotification({
+                    channelId: 'transaction-channel',
+                    title: data.title,
                     message: data.message,
                   });
                 });
@@ -42,13 +49,15 @@ const SplashScreen = ({navigation}) => {
               })
               .catch(err => {
                 console.log(err);
-                navigation.replace('Login');
                 socket.off(auth.authInfo.user_id);
+                socket.off(`transaction_${auth.authInfo.user_id}`);
+                navigation.replace('Login');
               });
           }, 500)
         : setTimeout(() => {
-            navigation.replace('Login');
+            socket.off(`transaction_${auth.authInfo.user_id}`);
             socket.off(auth.authInfo.user_id);
+            navigation.replace('Login');
           }, 500);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

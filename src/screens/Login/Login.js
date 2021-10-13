@@ -47,11 +47,19 @@ const Login = props => {
       isInitialMount.current = false;
     } else {
       if (props.auth.isLogin) {
+        console.log('[DEBUG LOGIN]', auth.authInfo.user_id);
         socket.on('connect');
         socket.on(auth.authInfo.user_id, data => {
           PushNotification.localNotification({
-            channelId: 'transaction-channel',
+            channelId: 'chat-channel',
             title: 'Chat from ' + data.senderName,
+            message: data.message,
+          });
+        });
+        socket.on(`transaction_${auth.authInfo.user_id}`, data => {
+          PushNotification.localNotification({
+            channelId: 'transaction-channel',
+            title: data.title,
             message: data.message,
           });
         });

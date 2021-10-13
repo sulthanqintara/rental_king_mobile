@@ -5,7 +5,7 @@ const ChatCard = ({user, chat, timeStamp, navigation, route, receiverId}) => {
   return (
     <Pressable
       style={styles.container}
-      onPress={() => navigation.navigate('ChatRoom', {receiverId})}>
+      onPress={() => navigation.navigate('ChatRoom', {receiverId, user})}>
       <View style={styles.leftContainer}>
         <Text style={styles.user}>{user}</Text>
         <Text numberOfLines={1} style={styles.chat}>

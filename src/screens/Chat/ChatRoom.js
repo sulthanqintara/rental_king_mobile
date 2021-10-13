@@ -15,6 +15,7 @@ const ChatRoom = props => {
   const [chatData, setChatData] = useState([]);
   const [message, setMessage] = useState('');
   const getChatHandler = () => {
+    console.log(props.route.params);
     const params = {
       sender_id: auth.authInfo.user_id,
       receiver_id: props.route.params.receiverId,
@@ -56,7 +57,9 @@ const ChatRoom = props => {
           <Pressable onPress={() => props.navigation.goBack()}>
             <Ionicons name="chevron-back-outline" size={28} />
           </Pressable>
-          <Text style={styles.titleTxt}>Chat Room</Text>
+          <Text style={styles.titleTxt}>
+            {props.route.params.user ? props.route.params.user : 'Chat Room'}
+          </Text>
         </View>
       </View>
       <ScrollView

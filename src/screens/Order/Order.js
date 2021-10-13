@@ -36,6 +36,7 @@ const Order = props => {
   const [duration, setDuration] = useState(1);
   const [ReserveDate, setReserveDate] = useState('Select Date');
   const [owner, setOwner] = useState(null);
+  const [ownerName, setownerName] = useState(null);
   const [visible, setVisible] = useState(true);
   const [countModalVisible, setCountModalVisible] = useState(false);
 
@@ -93,6 +94,7 @@ const Order = props => {
         setPrice(arrayResult.price);
         setCategory(arrayResult.category);
         setOwner(arrayResult.owner);
+        setownerName(arrayResult.ownerName);
       })
       .catch(err => console.log(err.response));
   }, []);
@@ -176,7 +178,15 @@ const Order = props => {
           </Text>
           <Pressable>
             {auth.authLevel === 3 && (
-              <Ionicons name="chatbubble-outline" color="#FFCD61" size={35} />
+              <Pressable
+                onPress={() =>
+                  navigation.navigate('ChatRoom', {
+                    receiverId: owner,
+                    user: ownerName,
+                  })
+                }>
+                <Ionicons name="chatbubble-outline" color="#FFCD61" size={35} />
+              </Pressable>
             )}
           </Pressable>
         </View>

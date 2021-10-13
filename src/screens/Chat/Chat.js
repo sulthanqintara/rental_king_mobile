@@ -15,7 +15,11 @@ const Chat = props => {
   };
 
   useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getLatestChatHandler();
+    });
     getLatestChatHandler();
+    return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

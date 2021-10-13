@@ -18,6 +18,7 @@ const Profile = props => {
     await props.onLogout();
     removeFew();
     socket.off(auth.user_id);
+    socket.off(`transaction_${auth.user_id}`);
     setTimeout(() => {
       props.navigation.reset({
         index: 0,
