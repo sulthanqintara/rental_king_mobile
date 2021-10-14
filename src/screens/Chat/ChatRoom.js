@@ -1,7 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {View, Text, Pressable, ScrollView} from 'react-native';
 import styles from './ChatRoomStyle';
-import socket from '../../components/Socket/SocketIo';
+// import socket from '../../components/Socket/SocketIo';
+import {API_URL} from '@env';
+import io from 'socket.io-client';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ChatRoomCard from '../../components/ChatRoomCard/ChatRoomCard';
@@ -38,6 +40,7 @@ const ChatRoom = props => {
       return setMessage('');
     });
   };
+  let socket = io(API_URL);
 
   useEffect(() => {
     getChatHandler();
