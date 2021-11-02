@@ -35,14 +35,16 @@ const ChatRoom = props => {
       user_id_receiver: props.route.params.receiverId,
       message,
     };
-    return postChat(body, auth.token).then(() => {
-      getChatHandler();
-      return setMessage('');
-    });
+    return postChat(body, auth.token)
+      .then(() => {
+        getChatHandler();
+        return setMessage('');
+      })
+      .catch(err => console.log(err.response));
   };
-  let socket = io(API_URL);
 
   useEffect(() => {
+    let socket = io(API_URL);
     getChatHandler();
     socket.on(auth.authInfo.user_id, data => {
       getChatHandler();
