@@ -6,25 +6,40 @@ import {RadioButton} from 'react-native-paper';
 import {getTransaction} from '../../utils/https/transactions';
 import {useSelector} from 'react-redux';
 import HistoryCard from '../../components/HistoryCard/HistoryCard';
+import LoadingModal from '../../components/LoadingModal/LoadingModal';
 
 const History = props => {
   const [selected, setSelected] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   const [historyData, setHistoryData] = useState([]);
 
   const authInfo = useSelector(state => state.auth.authInfo);
   const token = useSelector(state => state.auth.token);
   useEffect(() => {
+    setModalVisible(true);
     const params =
       authInfo.authLevel === 3
         ? {user_id: authInfo.user_id}
         : {owner_id: authInfo.user_id};
-    getTransaction(params, token).then(data => {
-      setHistoryData(data.data.result.data);
-    });
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      getTransaction(params, token).then(data => {
+    getTransaction(params, token)
+      .then(data => {
         setHistoryData(data.data.result.data);
+        setModalVisible(false);
+      })
+      .catch(err => {
+        console.log(err);
+        setModalVisible(false);
       });
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getTransaction(params, token)
+        .then(data => {
+          setHistoryData(data.data.result.data);
+          setModalVisible(false);
+        })
+        .catch(err => {
+          console.log(err);
+          setModalVisible(false);
+        });
       return unsubscribe;
     });
   }, []);
@@ -32,6 +47,12 @@ const History = props => {
 
   return (
     <View style={styles.container}>
+      <LoadingModal
+        modalVisible={modalVisible}
+        setModalVisible={() => {
+          setModalVisible;
+        }}
+      />
       <ScrollView>
         <RadioButton.Group
           onValueChange={newValue => setSelected(newValue)}

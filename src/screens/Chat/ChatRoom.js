@@ -10,14 +10,15 @@ import ChatRoomCard from '../../components/ChatRoomCard/ChatRoomCard';
 import {getChat, postChat} from '../../utils/https/chat';
 import {useSelector} from 'react-redux';
 import {TextInput} from 'react-native-gesture-handler';
+import LoadingModal from '../../components/LoadingModal/LoadingModal';
 
 const ChatRoom = props => {
   const scrollViewRef = useRef();
   const auth = useSelector(state => state.auth);
   const [chatData, setChatData] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState('');
   const getChatHandler = () => {
-    console.log(props.route.params);
     const params = {
       sender_id: auth.authInfo.user_id,
       receiver_id: props.route.params.receiverId,
@@ -25,8 +26,12 @@ const ChatRoom = props => {
     return getChat(params, auth.token)
       .then(data => {
         setChatData(data.data.result);
+        setModalVisible(false);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        setModalVisible(false);
+      });
   };
 
   const onSendHandler = () => {
@@ -44,6 +49,7 @@ const ChatRoom = props => {
   };
 
   useEffect(() => {
+    setModalVisible(true);
     let socket = io(API_URL);
     getChatHandler();
     socket.on(auth.authInfo.user_id, data => {
@@ -105,6 +111,12 @@ const ChatRoom = props => {
           />
         </Pressable>
       </View>
+      <LoadingModal
+        modalVisible={modalVisible}
+        setModalVisible={() => {
+          setModalVisible;
+        }}
+      />
     </View>
   );
 };

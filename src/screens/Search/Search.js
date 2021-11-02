@@ -33,7 +33,6 @@ const Search = ({navigation, filter, route}) => {
 
   const inputSearchHandler = search => {
     setModalVisible(true);
-    console.log(search, 'search');
     let config = search && {keyword: search};
     if (location) {
       config = {...config, ...{location: location}};
@@ -85,7 +84,6 @@ const Search = ({navigation, filter, route}) => {
     return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword, params]);
-  console.log(keyword, 'keyword');
   return (
     <View style={styles.container}>
       <Modal

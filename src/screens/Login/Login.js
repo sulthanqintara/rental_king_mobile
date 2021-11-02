@@ -6,8 +6,6 @@ import {
   TextInput,
   Pressable,
   Image,
-  Modal,
-  ActivityIndicator,
 } from 'react-native';
 import {connect, useSelector} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form';
@@ -20,6 +18,7 @@ import {loginAction} from '../../redux/actionCreators/auth';
 import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import PushNotification from 'react-native-push-notification';
+import LoadingModal from '../../components/LoadingModal/LoadingModal';
 
 const Login = props => {
   const auth = useSelector(reduxState => reduxState.auth);
@@ -85,17 +84,12 @@ const Login = props => {
 
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.modalContainer}>
-          <ActivityIndicator size="large" color="#FFCD61" />
-        </View>
-      </Modal>
+      <LoadingModal
+        modalVisible={modalVisible}
+        setModalVisible={() => {
+          setModalVisible;
+        }}
+      />
       <ImageBackground
         style={styles.imageBackground}
         source={imageBackground}

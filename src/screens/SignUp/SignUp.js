@@ -16,12 +16,14 @@ import googleIcon from '../../assets/img/google.png';
 import styles from './SignUpStyle';
 import {postRegister} from '../../utils/https/auth';
 import {useState} from 'react';
+import LoadingModal from '../../components/LoadingModal/LoadingModal';
 
 const SignUp = props => {
   const [errorMessage, setErrorMessage] = useState(false);
   const {control, handleSubmit} = useForm({mode: 'onBlur'});
-
+  const [modalVisible, setModalVisible] = useState(false);
   const onSubmit = data => {
+    setModalVisible(true);
     if (!data.email || !data.password || !data.phone_number) {
       return setErrorMessage(
         'Username, Phone Number, and Password are required',
@@ -39,14 +41,26 @@ const SignUp = props => {
       phone_number: data.phone_number,
       auth_level: 3,
     };
-    postRegister(send).then(() => {
-      ToastAndroid.show("Signed Up, Let's Login!", ToastAndroid.SHORT);
-      props.navigation.navigate('Login');
-    });
+    postRegister(send)
+      .then(() => {
+        ToastAndroid.show("Signed Up, Let's Login!", ToastAndroid.SHORT);
+        setModalVisible(false);
+        props.navigation.navigate('Login');
+      })
+      .catch(err => {
+        console.log(err);
+        setModalVisible(false);
+      });
   };
 
   return (
     <View style={styles.container}>
+      <LoadingModal
+        modalVisible={modalVisible}
+        setModalVisible={() => {
+          setModalVisible;
+        }}
+      />
       <ImageBackground
         style={styles.imageBackground}
         source={imageBackground}

@@ -10,16 +10,19 @@ import {removeFew} from '../../utils/asyncStorage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './ProfileStyle';
 import LogoutModal from '../../components/Modals/Modal';
+import LoadingModal from '../../components/LoadingModal/LoadingModal';
 
 const Profile = props => {
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
   const LogoutHandler = async () => {
     await props.onLogout();
     removeFew();
     socket.off(auth.user_id);
     socket.off(`transaction_${auth.user_id}`);
     setTimeout(() => {
+      setLoadingModal(false);
       props.navigation.reset({
         index: 0,
         routes: [{name: 'Login'}],
@@ -95,7 +98,10 @@ const Profile = props => {
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           buttonStyle={styles.logoutBtn}
-          nextHandler={LogoutHandler}
+          nextHandler={() => {
+            setLoadingModal(true);
+            LogoutHandler();
+          }}
           buttonText="Log out"
           leftButtonText="Yes, Log me out"
           rightButtonText="Cancel"
@@ -103,6 +109,12 @@ const Profile = props => {
           leftButtonColor="#b02a37"
         />
       </View>
+      <LoadingModal
+        modalVisible={loadingModal}
+        setModalVisible={() => {
+          setLoadingModal;
+        }}
+      />
     </>
   );
 };
