@@ -25,9 +25,9 @@ const Payment2 = props => {
     });
   };
 
-  const paymentCode = (min, max) => {
-    min = Math.ceil(11111111);
-    max = Math.floor(99999999);
+  const paymentCode = () => {
+    const min = Math.ceil(11111111);
+    const max = Math.floor(99999999);
     return Math.floor(Math.random() * (max - min) + min);
   };
   const paymentHandler = () => {

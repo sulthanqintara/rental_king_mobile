@@ -46,4 +46,9 @@ export default StyleSheet.create({
   cardBottomLeftContainer: {marginRight: 'auto'},
   available: {fontWeight: '700', color: '#087E0D'},
   notAvailable: {fontWeight: '700', color: 'red'},
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, .5)',
+    justifyContent: 'center',
+  },
 });

@@ -6,6 +6,8 @@ import {
   TextInput,
   Pressable,
   Image,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
 import {connect, useSelector} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form';
@@ -21,17 +23,22 @@ import PushNotification from 'react-native-push-notification';
 
 const Login = props => {
   const auth = useSelector(reduxState => reduxState.auth);
-
   const [errorMessage, setErrorMessage] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const {control, handleSubmit} = useForm({mode: 'onBlur'});
   const onSubmit = data => {
+    setErrorMessage(false);
+    setModalVisible(true);
     if (!data.email || !data.password) {
+      setModalVisible(false);
       return setErrorMessage('Username and Password are Required');
     }
     if (!data.email.includes('@')) {
+      setModalVisible(false);
       return setErrorMessage('Please input a Valid Email');
     }
     if (data.password.length < 6) {
+      setModalVisible(false);
       return setErrorMessage('Password must have 6 or more characters');
     }
     const form = new URLSearchParams();
@@ -47,7 +54,6 @@ const Login = props => {
       isInitialMount.current = false;
     } else {
       if (props.auth.isLogin) {
-        console.log('[DEBUG LOGIN]', auth.authInfo.user_id);
         socket.on('connect');
         socket.on(auth.authInfo.user_id, data => {
           PushNotification.localNotification({
@@ -63,12 +69,14 @@ const Login = props => {
             message: data.message,
           });
         });
+        setModalVisible(false);
         props.navigation.reset({
           index: 0,
           routes: [{name: 'Home'}],
         });
       }
       if (errorLogin.includes('401') === true) {
+        setModalVisible(false);
         return setErrorMessage('Username and/or Password Are Incorrect');
       }
     }
@@ -77,6 +85,17 @@ const Login = props => {
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.modalContainer}>
+          <ActivityIndicator size="large" color="#FFCD61" />
+        </View>
+      </Modal>
       <ImageBackground
         style={styles.imageBackground}
         source={imageBackground}

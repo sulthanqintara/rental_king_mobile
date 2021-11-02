@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, Image, TextInput, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TextInput,
+  Pressable,
+  Modal,
+  ActivityIndicator,
+} from 'react-native';
 import axios from 'axios';
 import {API_URL} from '@env';
 
@@ -12,6 +21,7 @@ const Search = ({navigation, filter, route}) => {
   const [data, setData] = useState([]);
   const [nextPage, setNexPage] = useState(null);
   const [keyword, setKeyword] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const params = route.params;
   const date = params?.date ? params.date : null;
   const location = params?.location ? params.location : null;
@@ -19,8 +29,11 @@ const Search = ({navigation, filter, route}) => {
   const minPrice = params?.minPrice ? params.minPrice : null;
   const rating = params?.rating ? params.rating : null;
   const type = params?.type ? params.type : null;
+  const sort = params?.sort ? params.sort : null;
 
   const inputSearchHandler = search => {
+    setModalVisible(true);
+    console.log(search, 'search');
     let config = search && {keyword: search};
     if (location) {
       config = {...config, ...{location: location}};
@@ -34,20 +47,58 @@ const Search = ({navigation, filter, route}) => {
     if (type) {
       config = {...config, ...{filter_by_type: type}};
     }
-    return getVehicles(config).then(result => {
-      setNexPage(result.data.result.nextPage);
-      return setData(result.data.result.data);
-    });
+    switch (sort) {
+      case 1:
+        config = {...config, ...{order_by: 'v.price', sort: 'DESC'}};
+        break;
+      case 2:
+        config = {...config, ...{order_by: 'v.price', sort: 'ASC'}};
+        break;
+      case 3:
+        config = {...config, ...{order_by: 'v.model', sort: 'ASC'}};
+        break;
+      case 4:
+        config = {...config, ...{order_by: 'v.model', sort: 'DESC'}};
+        break;
+
+      default:
+        break;
+    }
+    return getVehicles(config)
+      .then(result => {
+        setNexPage(result.data.result.nextPage);
+        setModalVisible(false);
+        return setData(result.data.result.data);
+      })
+      .catch(err => {
+        console.log(err.response);
+        setModalVisible(false);
+        return setData(false);
+      });
   };
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      params && inputSearchHandler(params.keyword);
+      if (params) {
+        inputSearchHandler(keyword);
+      }
     });
     return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
+  }, [keyword, params]);
+  console.log(keyword, 'keyword');
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.modalContainer}>
+          <ActivityIndicator size="large" color="#FFCD61" />
+        </View>
+      </Modal>
       <Pressable
         style={styles.header}
         onPress={() => {
@@ -59,6 +110,7 @@ const Search = ({navigation, filter, route}) => {
             rating,
             type,
             keyword,
+            sort,
           });
         }}>
         <Text style={styles.filterText}>
@@ -68,6 +120,10 @@ const Search = ({navigation, filter, route}) => {
           {type === 1 && ' - Car'}
           {type === 2 && ' - Motorcycle'}
           {type === 3 && ' - Bicycle'}
+          {sort === 1 && ' - Highest Price'}
+          {sort === 2 && ' - Lowest Price'}
+          {sort === 3 && ' - A to Z'}
+          {sort === 4 && ' - Z to A'}
         </Text>
         <MaterialIcons name="filter-alt" size={22} color="#3939394D" />
       </Pressable>
@@ -82,6 +138,7 @@ const Search = ({navigation, filter, route}) => {
           }}
         />
       </View>
+      {!data && <Text style={styles.cardTextContainer}>No Vehicle Found</Text>}
       <FlatList
         data={data}
         renderItem={({item}) => {

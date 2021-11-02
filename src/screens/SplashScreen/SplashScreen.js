@@ -30,7 +30,7 @@ const SplashScreen = ({navigation}) => {
         ? setTimeout(() => {
             getPatchToken(auth.token)
               .then(() => {
-                socket.on('connect');
+                socket.on('connect', data => console.log(data));
                 socket.on(auth.authInfo.user_id, data => {
                   PushNotification.localNotification({
                     channelId: 'chat-channel',
