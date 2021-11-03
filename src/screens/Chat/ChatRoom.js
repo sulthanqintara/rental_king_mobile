@@ -35,7 +35,7 @@ const ChatRoom = props => {
   };
 
   const onSendHandler = () => {
-    if (message) {
+    if (message === '') {
       return;
     }
     const body = {
