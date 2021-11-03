@@ -35,6 +35,9 @@ const ChatRoom = props => {
   };
 
   const onSendHandler = () => {
+    if (message) {
+      return;
+    }
     const body = {
       user_id_sender: auth.authInfo.user_id,
       user_id_receiver: props.route.params.receiverId,
