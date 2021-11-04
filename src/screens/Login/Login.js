@@ -19,11 +19,13 @@ import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import PushNotification from 'react-native-push-notification';
 import LoadingModal from '../../components/LoadingModal/LoadingModal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Login = props => {
   const auth = useSelector(reduxState => reduxState.auth);
   const [errorMessage, setErrorMessage] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const {control, handleSubmit} = useForm({mode: 'onBlur'});
   const onSubmit = data => {
     setErrorMessage(false);
@@ -81,7 +83,7 @@ const Login = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.auth.isLogin, props.auth.error]);
-
+  console.log(showPassword);
   return (
     <View style={styles.container}>
       <LoadingModal
@@ -101,31 +103,45 @@ const Login = props => {
             name="email"
             defaultValue=""
             render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                autoCompleteType="email"
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="E-mail"
-                placeholderTextColor="white"
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  autoCompleteType="email"
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="E-mail"
+                  placeholderTextColor="white"
+                />
+              </View>
             )}
           />
           <Controller
             control={control}
             name="password"
             render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                autoCompleteType="password"
-                secureTextEntry={true}
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Password"
-                placeholderTextColor="white"
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  autoCompleteType="password"
+                  secureTextEntry={!showPassword}
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Password"
+                  placeholderTextColor="white"
+                />
+                <Pressable
+                  onPress={() => {
+                    setShowPassword(!showPassword);
+                  }}>
+                  <Ionicons
+                    name={showPassword ? 'eye' : 'eye-off'}
+                    size={25}
+                    color="black"
+                  />
+                </Pressable>
+              </View>
             )}
           />
           <Pressable onPress={() => props.navigation.navigate('Forgot')}>

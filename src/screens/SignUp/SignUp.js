@@ -17,11 +17,14 @@ import styles from './SignUpStyle';
 import {postRegister} from '../../utils/https/auth';
 import {useState} from 'react';
 import LoadingModal from '../../components/LoadingModal/LoadingModal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const SignUp = props => {
   const [errorMessage, setErrorMessage] = useState(false);
   const {control, handleSubmit} = useForm({mode: 'onBlur'});
   const [modalVisible, setModalVisible] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const onSubmit = data => {
     setModalVisible(true);
     if (!data.email || !data.password || !data.phone_number) {
@@ -72,47 +75,63 @@ const SignUp = props => {
             control={control}
             defaultValue=""
             render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                autoCompleteType="email"
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Email"
-                placeholderTextColor="white"
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  autoCompleteType="email"
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Email"
+                  placeholderTextColor="white"
+                />
+              </View>
             )}
           />
           <Controller
             name="phone_number"
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                autoCompleteType="tel"
-                keyboardType="number-pad"
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Phone Number"
-                placeholderTextColor="white"
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  autoCompleteType="tel"
+                  keyboardType="number-pad"
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Phone Number"
+                  placeholderTextColor="white"
+                />
+              </View>
             )}
           />
           <Controller
             name="password"
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                autoCompleteType="password"
-                secureTextEntry={true}
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Password"
-                placeholderTextColor="white"
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  autoCompleteType="password"
+                  secureTextEntry={!showPassword}
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Password"
+                  placeholderTextColor="white"
+                />
+                <Pressable
+                  onPress={() => {
+                    setShowPassword(!showPassword);
+                  }}>
+                  <Ionicons
+                    name={showPassword ? 'eye' : 'eye-off'}
+                    size={25}
+                    color="black"
+                  />
+                </Pressable>
+              </View>
             )}
           />
           <Pressable

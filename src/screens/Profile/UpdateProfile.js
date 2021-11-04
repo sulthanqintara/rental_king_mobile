@@ -67,20 +67,32 @@ const UpdateProfile = props => {
   };
 
   const onImagePickHandler = () => {
-    launchImageLibrary({mediaType: 'photo'}, callback => {
-      if (callback.assets) {
-        setPicture(callback.assets[0].uri);
-        setPictureUpload(callback.assets[0]);
-      }
-    });
+    launchImageLibrary(
+      {mediaType: 'photo', maxHeight: 500, maxWidth: 500, quality: 0.75},
+      callback => {
+        if (callback.assets) {
+          setPicture(callback.assets[0].uri);
+          setPictureUpload(callback.assets[0]);
+        }
+      },
+    );
   };
   const onCamPickHandler = () => {
-    launchCamera({mediaType: 'photo', saveToPhotos: true}, callback => {
-      if (callback.assets) {
-        setPictureUpload(callback.assets[0]);
-        setPicture(callback.assets[0].uri);
-      }
-    });
+    launchCamera(
+      {
+        mediaType: 'photo',
+        saveToPhotos: true,
+        maxHeight: 500,
+        maxWidth: 500,
+        quality: 0.75,
+      },
+      callback => {
+        if (callback.assets) {
+          setPictureUpload(callback.assets[0]);
+          setPicture(callback.assets[0].uri);
+        }
+      },
+    );
   };
   const requestCameraPermission = async () => {
     try {

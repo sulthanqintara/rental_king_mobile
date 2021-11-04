@@ -18,13 +18,19 @@ export default StyleSheet.create({
     fontSize: 36,
     marginBottom: 170,
   },
-  input: {
+  inputContainer: {
     width: 'auto',
     height: 50,
     backgroundColor: 'rgba(223, 222, 222, 0.5)',
-    padding: 14,
     borderRadius: 10,
     marginVertical: 9,
+    flexDirection: 'row',
+    paddingHorizontal: 14,
+    alignItems: 'center',
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 14,
     color: 'white',
   },
   yellowButton: {

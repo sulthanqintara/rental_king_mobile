@@ -27,6 +27,9 @@ const UpdatePassword = props => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const saveHandler = data => {
     if (data.newPassword !== data.newPasswordConfirm) {
@@ -75,16 +78,28 @@ const UpdatePassword = props => {
             required: true,
           }}
           render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              secureTextEntry={true}
-              importantForAutofill="no"
-              style={styles.field}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Old Password"
-              placeholderTextColor="#BBBBBB"
-            />
+            <View style={styles.fieldContainer}>
+              <TextInput
+                secureTextEntry={!showOldPassword}
+                importantForAutofill="no"
+                style={styles.field}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Old Password"
+                placeholderTextColor="#BBBBBB"
+              />
+              <Pressable
+                onPress={() => {
+                  setShowOldPassword(!showOldPassword);
+                }}>
+                <Ionicons
+                  name={showOldPassword ? 'eye' : 'eye-off'}
+                  size={25}
+                  color="black"
+                />
+              </Pressable>
+            </View>
           )}
         />
         {errors.oldPassword && (
@@ -100,16 +115,28 @@ const UpdatePassword = props => {
             required: true,
           }}
           render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              importantForAutofill="no"
-              secureTextEntry={true}
-              style={styles.field}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="New Password"
-              placeholderTextColor="#BBBBBB"
-            />
+            <View style={styles.fieldContainer}>
+              <TextInput
+                importantForAutofill="no"
+                secureTextEntry={!showNewPassword}
+                style={styles.field}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="New Password"
+                placeholderTextColor="#BBBBBB"
+              />
+              <Pressable
+                onPress={() => {
+                  setShowNewPassword(!showNewPassword);
+                }}>
+                <Ionicons
+                  name={showNewPassword ? 'eye' : 'eye-off'}
+                  size={25}
+                  color="black"
+                />
+              </Pressable>
+            </View>
           )}
         />
         {errors.newPassword && (
@@ -125,16 +152,28 @@ const UpdatePassword = props => {
             required: true,
           }}
           render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              importantForAutofill="no"
-              secureTextEntry={true}
-              style={styles.field}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Confirm New Password"
-              placeholderTextColor="#BBBBBB"
-            />
+            <View style={styles.fieldContainer}>
+              <TextInput
+                importantForAutofill="no"
+                secureTextEntry={!showConfirmPassword}
+                style={styles.field}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Confirm New Password"
+                placeholderTextColor="#BBBBBB"
+              />
+              <Pressable
+                onPress={() => {
+                  setShowConfirmPassword(!showConfirmPassword);
+                }}>
+                <Ionicons
+                  name={showConfirmPassword ? 'eye' : 'eye-off'}
+                  size={25}
+                  color="black"
+                />
+              </Pressable>
+            </View>
           )}
         />
         {errors.newPasswordConfirm && (
