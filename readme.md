@@ -25,13 +25,13 @@ This is source code for Rental King Motor Mobile app, specifically for Android. 
 git clone https://github.com/sulthanqintara/rental_king_mobile
 ```
 
-2. Open terminal or CMD on the app's directory and type:
+2. To install all the dependencies package, open terminal or CMD on the app's directory and type:
 
 ```
 yarn install
 ```
 
-to install all the dependencies package.
+
 
 3. Add .env at the root of the project's folder
 
