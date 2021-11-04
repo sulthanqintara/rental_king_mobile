@@ -1,6 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {View, Text, Pressable, ImageBackground, ScrollView} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  View,
+  Text,
+  Pressable,
+  ImageBackground,
+  ScrollView,
+  BackHandler,
+} from 'react-native';
 import styles from './FinishedPaymentStyle';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,16 +16,41 @@ import {useSelector} from 'react-redux';
 
 const FinishedPayment = ({route, navigation}) => {
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
-  const passedData = route.params.passedData;
+  const transaction = useSelector(state => state.transaction);
+
+  const passedData = route.params?.passedData
+    ? route.params?.passedData
+    : transaction;
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Pressable
         onPress={() => {
-          navigation.navigate('Chat History');
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Home'}],
+          });
         }}
         style={[styles.flexRow, styles.header]}>
         <Ionicons name="chevron-back-outline" size={28} />
-        <Text style={[styles.bigTxt, styles.headerTitle]}>See History</Text>
+        <Text style={[styles.bigTxt, styles.headerTitle]}>Back to Home</Text>
       </Pressable>
       <ScrollView>
         <Text style={styles.success}>Payment Success!</Text>

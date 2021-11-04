@@ -5,6 +5,7 @@ import rpm from 'redux-promise-middleware';
 import {createLogger} from 'redux-logger';
 
 import authReducer from './reducers/auth';
+import transactionReducer from './reducers/transaction';
 
 const persistAuth = {
   key: 'auth',
@@ -14,6 +15,7 @@ const logger = createLogger();
 
 const reducers = combineReducers({
   auth: persistReducer(persistAuth, authReducer),
+  transaction: transactionReducer,
 });
 
 const enhancers = applyMiddleware(rpm, logger);

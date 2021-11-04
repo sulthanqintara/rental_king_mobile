@@ -1,24 +1,72 @@
 import React, {useState} from 'react';
-import {View, Text, ScrollView, TextInput, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  Pressable,
+  ToastAndroid,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import styles from './Payment1Style';
-import RNPickerSelect from 'react-native-picker-select';
+// import RNPickerSelect from 'react-native-picker-select';
+import {Picker} from '@react-native-picker/picker';
 import LinearGradient from 'react-native-linear-gradient';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {profileAction} from '../../../redux/actionCreators/auth';
+import {transactionAction} from '../../../redux/actionCreators/transaction';
 
 const Payment1 = props => {
   const {navigation, route} = props;
-  let bodyData = {...route.params};
-
-  const [idCard, setIdCard] = useState(null);
-  const [payment, setPayment] = useState(null);
-
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
+  const dispatch = useDispatch();
+  const transaction = useSelector(state => state.transaction);
+  const [modalOpen, setModalOpen] = useState(auth.address);
+  const [address, setAddress] = useState(auth.address);
+  const [idCard, setIdCard] = useState(null);
+  const [payment, setPayment] = useState(0);
+  const [firstName, setFirstName] = useState(
+    auth?.userName ? auth.userName.split(' ')[0] : '',
+  );
+  const [lastName, setlastName] = useState(
+    auth?.userName ? auth.userName.split(' ')[1] : '',
+  );
+
   const placeholder = {
     label: 'Payment Type',
     value: null,
     color: '#9EA0A4',
+  };
+  const buttonHandler = () => {
+    if (!idCard) {
+      return ToastAndroid.show(
+        'Please input id card number',
+        ToastAndroid.SHORT,
+      );
+    }
+    if (!firstName) {
+      return ToastAndroid.show('Please input first name', ToastAndroid.SHORT);
+    }
+    if (!address) {
+      return ToastAndroid.show('Please input location!', ToastAndroid.SHORT);
+    }
+    if (!payment) {
+      return ToastAndroid.show(
+        'Please select payment methods',
+        ToastAndroid.SHORT,
+      );
+    }
+    const form = new FormData();
+    !auth?.userName &&
+      firstName &&
+      form.append('name', `${firstName} ${lastName}`);
+    !auth.address && address && form.append('address', address);
+    form['_parts'].length > 0 && dispatch(profileAction(form, auth.user_id));
+    dispatch(transactionAction({idCard, payment}));
+    navigation.navigate('Payment2');
   };
 
   return (
@@ -54,55 +102,79 @@ const Payment1 = props => {
       />
       <TextInput
         placeholder="First Name"
-        value={auth.userName.split(' ')[0]}
+        defaultValue={auth?.userName ? auth.userName.split(' ')[0] : ''}
         style={styles.txtInput}
+        onChange={e => setFirstName(e.nativeEvent.text)}
       />
       <TextInput
         placeholder="Last Name"
-        value={auth.userName.split(' ')[1]}
+        defaultValue={auth?.userName ? auth.userName.split(' ')[1] : ''}
         style={styles.txtInput}
       />
       <TextInput
         placeholder="Mobile Phone (must be active)"
         style={styles.txtInput}
-        value={auth.phone}
+        defaultValue={auth.phone}
       />
       <TextInput
         placeholder="Email address"
-        value={auth.email}
+        defaultValue={auth.email}
         style={styles.txtInput}
       />
       <TextInput
         placeholder="Location"
-        value={auth.address}
+        defaultValue={auth.address}
         style={styles.txtInput}
-      />
-      <RNPickerSelect
-        placeholder={placeholder}
-        onValueChange={value => setPayment(value)}
-        useNativeAndroidPickerStyle={false}
-        style={styles}
-        value={payment}
-        items={[
-          {label: 'Transfer', value: 1, color: 'black'},
-          {label: 'Cash', value: 2, color: 'black'},
-        ]}
-        Icon={() => {
-          return (
-            <Ionicons
-              name="caret-down"
-              size={20}
-              color="gray"
-              style={styles.dropdownIcon}
-            />
-          );
+        onChange={e => {
+          setAddress(e.nativeEvent.text);
         }}
       />
       <Pressable
-        style={styles.order}
+        style={styles.inputAndroid}
         onPress={() => {
-          navigation.navigate('Payment2', {...bodyData, idCard, payment});
+          setModalOpen(true);
         }}>
+        <Text style={styles.modalDurationText}>
+          {payment === 0 && 'Select Payment Method'}
+          {payment === 1 && 'Transfer'}
+          {payment === 2 && 'Cash'}
+        </Text>
+        <Ionicons name="chevron-down" size={16} />
+      </Pressable>
+      <Modal
+        animationType="fade"
+        visible={modalOpen}
+        transparent={true}
+        onRequestClose={() => {
+          setModalOpen(!modalOpen);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.durationModal}>
+            <View style={styles.modalDurationRow}>
+              <Text style={[styles.modalDurationText, styles.disabled]}>
+                Select Transfer Method :
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.modalDurationRow}
+              onPress={() => {
+                setModalOpen(false);
+                setPayment(1);
+              }}>
+              <Text style={styles.modalDurationText}>Transfer</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalDurationRow}
+              onPress={() => {
+                setModalOpen(false);
+                setPayment(2);
+              }}>
+              <Text style={styles.modalDurationText}>Cash</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Pressable style={styles.order} onPress={buttonHandler}>
         <Text style={styles.bigTxt}>See Order Details</Text>
       </Pressable>
     </ScrollView>

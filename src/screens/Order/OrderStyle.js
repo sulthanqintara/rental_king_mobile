@@ -1,4 +1,6 @@
 import {StyleSheet} from 'react-native';
+import {Dimensions} from 'react-native';
+const d = Dimensions.get('window').width;
 
 export default StyleSheet.create({
   header: {
@@ -74,17 +76,21 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(57, 57, 57, 0.1)',
     justifyContent: 'center',
     borderRadius: 10,
-    paddingLeft: 16,
+    paddingHorizontal: 16,
     flex: 1,
     marginRight: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   inputAndroid: {
     backgroundColor: 'rgba(57, 57, 57, 0.1)',
     justifyContent: 'center',
     borderRadius: 10,
-    paddingHorizontal: 16,
-    width: 125,
+    width: 150,
     color: 'black',
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   dropdownIcon: {
     marginVertical: 12,
@@ -121,7 +127,6 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(255, 255, 255)',
   },
   countModalContainer: {backgroundColor: 'rgba(0, 0, 0, 0.5)'},
   countModal: {
@@ -136,5 +141,22 @@ export default StyleSheet.create({
     padding: 5,
     borderRadius: 10,
     marginTop: 20,
+  },
+  durationModal: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    paddingVertical: 10,
+  },
+  modalDurationRow: {
+    width: (d * 76) / 100,
+    height: 50,
+    justifyContent: 'center',
+  },
+  modalDurationText: {
+    fontSize: 16,
+  },
+  disabled: {
+    color: '#6666',
   },
 });

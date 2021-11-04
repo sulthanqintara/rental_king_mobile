@@ -38,7 +38,7 @@ export default StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  searchInput: {paddingHorizontal: 10},
+  searchInput: {paddingHorizontal: 10, color: 'black'},
   cardTextContainer: {padding: 15},
   cardLocation: {color: '#999999', marginBottom: 5},
   cardModel: {fontSize: 18, fontWeight: '600', marginBottom: 5},

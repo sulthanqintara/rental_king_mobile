@@ -130,6 +130,7 @@ const Search = ({navigation, filter, route}) => {
         <TextInput
           placeholder="Search"
           style={styles.searchInput}
+          placeholderTextColor="#636363"
           onEndEditing={e => {
             inputSearchHandler(e.nativeEvent.text);
             setKeyword(e.nativeEvent.text);

@@ -1,4 +1,6 @@
 import {StyleSheet} from 'react-native';
+import {Dimensions} from 'react-native';
+const d = Dimensions.get('window').width;
 
 export default StyleSheet.create({
   bigTxt: {fontSize: 24, fontWeight: '700'},
@@ -28,14 +30,18 @@ export default StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 15,
     marginVertical: 10,
+    fontSize: 16,
+    color: 'black',
   },
   inputAndroid: {
     backgroundColor: 'rgba(223, 222, 222, 0.75)',
     height: 50,
     borderRadius: 10,
-    paddingLeft: 15,
     marginVertical: 10,
     color: 'black',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    flexDirection: 'row',
   },
   dropdownIcon: {
     paddingRight: 10,
@@ -50,5 +56,29 @@ export default StyleSheet.create({
     marginTop: 20,
     marginBottom: 30,
     borderRadius: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+  },
+  durationModal: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    paddingVertical: 10,
+  },
+  modalDurationRow: {
+    width: (d * 76) / 100,
+    height: 50,
+    justifyContent: 'center',
+  },
+  modalDurationText: {
+    fontSize: 16,
+    marginRight: 'auto',
+  },
+  disabled: {
+    color: '#6666',
   },
 });

@@ -8,21 +8,24 @@ import {
   ToastAndroid,
   ScrollView,
   Modal,
+  TouchableOpacity,
 } from 'react-native';
 import styles from './OrderStyle';
 import axios from 'axios';
-import DatePicker from 'react-native-date-picker';
-import RNPickerSelect from 'react-native-picker-select';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {API_URL} from '@env';
+import {Picker} from '@react-native-picker/picker';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import imagePlaceholder from '../../assets/img/imagePlaceholder.png';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {ActivityIndicator, Colors} from 'react-native-paper';
+import {transactionAction} from '../../redux/actionCreators/transaction';
 
 const Order = props => {
   const {route, navigation} = props;
+  const dispatch = useDispatch();
   const auth = useSelector(reduxState => reduxState.auth.authInfo);
 
   const [available, setAvailable] = useState('');
@@ -33,7 +36,7 @@ const Order = props => {
   const [category, setCategory] = useState('');
   const [favourite, setFavourite] = useState(false);
   const [count, setCount] = useState(1);
-  const [duration, setDuration] = useState(1);
+  const [duration, setDuration] = useState(0);
   const [ReserveDate, setReserveDate] = useState('Select Date');
   const [owner, setOwner] = useState(null);
   const [ownerName, setownerName] = useState(null);
@@ -41,6 +44,7 @@ const Order = props => {
   const [countModalVisible, setCountModalVisible] = useState(false);
 
   const [open, setOpen] = useState(false);
+  const [durationModalOpen, setDurationModalOpen] = useState(false);
   const id = route.params.id;
 
   const addDays = (date, days) => {
@@ -55,6 +59,23 @@ const Order = props => {
   };
 
   const onPressHandler = () => {
+    const dateNow = new Date();
+    const datePicked = new Date(ReserveDate);
+    if (datePicked.getTime() < dateNow.getTime() - 23 * 60 * 60 * 1000) {
+      return ToastAndroid.show(
+        'Please select valid date to reserve!',
+        ToastAndroid.SHORT,
+      );
+    }
+    if (typeof ReserveDate === 'string') {
+      return ToastAndroid.show(
+        'Please select date to reserve!',
+        ToastAndroid.SHORT,
+      );
+    }
+    if (!duration) {
+      return ToastAndroid.show('Please select duration!', ToastAndroid.SHORT);
+    }
     const nextData = {
       user_id: auth.user_id,
       model_id: id,
@@ -66,13 +87,8 @@ const Order = props => {
       model,
       duration,
     };
-    if (typeof ReserveDate === 'string') {
-      return ToastAndroid.show(
-        'Please select date to reserve!',
-        ToastAndroid.SHORT,
-      );
-    }
-    return navigation.navigate('Payment1', nextData);
+    dispatch(transactionAction(nextData));
+    return navigation.navigate('Payment1');
   };
   const ownerHandler = () => {
     navigation.navigate('EditItem', {id});
@@ -103,7 +119,6 @@ const Order = props => {
     <ScrollView>
       <Modal
         animationType="fade"
-        transparent={true}
         visible={visible}
         onRequestClose={() => {
           setVisible(!visible);
@@ -114,7 +129,48 @@ const Order = props => {
       </Modal>
       <Modal
         animationType="fade"
+        visible={durationModalOpen}
         transparent={true}
+        onRequestClose={() => {
+          setDurationModalOpen(!durationModalOpen);
+        }}>
+        <View style={[styles.centeredView, styles.countModalContainer]}>
+          <View style={styles.durationModal}>
+            <View style={styles.modalDurationRow}>
+              <Text style={[styles.modalDurationText, styles.disabled]}>
+                Select Duration :
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.modalDurationRow}
+              onPress={() => {
+                setDurationModalOpen(false);
+                setDuration(1);
+              }}>
+              <Text style={styles.modalDurationText}>1 Day</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalDurationRow}
+              onPress={() => {
+                setDurationModalOpen(false);
+                setDuration(2);
+              }}>
+              <Text style={styles.modalDurationText}>2 Days</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalDurationRow}
+              onPress={() => {
+                setDurationModalOpen(false);
+                setDuration(3);
+              }}>
+              <Text style={styles.modalDurationText}>3 Days</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        transparent={true}
+        animationType="fade"
         visible={countModalVisible}
         onRequestClose={() => {
           setCountModalVisible(true);
@@ -132,6 +188,7 @@ const Order = props => {
           </View>
         </View>
       </Modal>
+
       <ImageBackground
         style={styles.header}
         source={
@@ -231,17 +288,16 @@ const Order = props => {
         </View>
         <View style={styles.picker}>
           <Pressable style={styles.date} onPress={() => setOpen(true)}>
-            <Text>
+            <Text style={{marginRight: 'auto'}}>
               {typeof ReserveDate === 'object'
                 ? ReserveDate.toDateString()
                 : ReserveDate}
             </Text>
+            <Ionicons name="chevron-down" size={16} />
           </Pressable>
-          <DatePicker
-            modal
+          <DateTimePickerModal
+            isVisible={open}
             mode="date"
-            open={open}
-            date={typeof ReserveDate === 'object' ? ReserveDate : new Date()}
             onConfirm={date => {
               setOpen(false);
               setReserveDate(date);
@@ -250,27 +306,19 @@ const Order = props => {
               setOpen(false);
             }}
           />
-          <RNPickerSelect
-            placeholder={{}}
-            onValueChange={value => setDuration(value)}
-            useNativeAndroidPickerStyle={false}
-            style={styles}
-            items={[
-              {label: '1 Day', value: 1},
-              {label: '2 Days', value: 2},
-              {label: '3 Days', value: 3},
-            ]}
-            Icon={() => {
-              return (
-                <Ionicons
-                  name="caret-down"
-                  size={20}
-                  color="gray"
-                  style={styles.dropdownIcon}
-                />
-              );
-            }}
-          />
+          <Pressable
+            style={styles.inputAndroid}
+            onPress={() => {
+              setDurationModalOpen(true);
+            }}>
+            <Text style={{marginRight: 'auto'}}>
+              {duration === 0 && 'Select Duration'}
+              {duration === 1 && '1 Day'}
+              {duration === 2 && '2 Days'}
+              {duration === 3 && '3 Days'}
+            </Text>
+            <Ionicons name="chevron-down" size={16} />
+          </Pressable>
         </View>
         <Pressable
           style={available ? styles.reserve : styles.reserveDisabled}

@@ -53,15 +53,15 @@ const UpdateProfile = props => {
             ? pictureUpload.uri
             : pictureUpload.uri.replace('file://', ''),
       });
-    form.append('gender', gender);
-    form.append('name', name);
-    form.append('email', email);
-    form.append('phone_number', phone);
+    gender && form.append('gender', gender);
+    name && form.append('name', name);
+    email && form.append('email', email);
+    phone && form.append('phone_number', phone);
     form.append(
       'DOB',
       `${dob.getFullYear()}-${dob.getMonth()}-${dob.getDate()}`,
     );
-    form.append('address', address);
+    address && form.append('address', address);
     dispatch(profileAction(form, auth.user_id));
     ToastAndroid.show('Profile Updated!', ToastAndroid.SHORT);
   };

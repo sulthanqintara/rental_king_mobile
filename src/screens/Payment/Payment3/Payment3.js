@@ -1,6 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
-import {View, Text, Pressable, ScrollView, ToastAndroid} from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  ToastAndroid,
+  BackHandler,
+} from 'react-native';
 import {
   getTransactionByID,
   patchTransaction,
@@ -14,6 +21,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useSelector} from 'react-redux';
 import PushNotification from 'react-native-push-notification';
+import LoadingModal from '../../../components/LoadingModal/LoadingModal';
 
 const Payment3 = props => {
   const {navigation, route} = props;
@@ -25,39 +33,62 @@ const Payment3 = props => {
   const [finishDate, setFinishDate] = useState(null);
   const [payBefore, setPayBefore] = useState('');
   const [prepayment, setPrepayment] = useState(null);
+  const [loadingModal, setLoadingModal] = useState(true);
   const auth = useSelector(state => state.auth.authInfo);
-  const duration = route.params.duration;
-  const passedData = route.params.passedData;
+  const transaction = useSelector(state => state.transaction);
+  console.log(transaction);
 
   const confirmNotification = (result, resultModel) => {
     PushNotification.localNotification({
       channelId: 'transaction-channel',
       title: 'Payment has been Confirmed',
       message: 'Your payment for ' + model + ' Has been confirmed!',
-      id: route.params.transactionId || passedData?.id,
+      id: route?.params?.transactionId || transaction?.id,
     });
   };
+  useEffect(() => {
+    const backAction = () => {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const transactionIdParams = route?.params?.transactionId
+    ? route?.params?.transactionId
+    : transaction?.transactionId;
 
   useEffect(() => {
-    getTransactionByID(route.params.transactionId || passedData?.id).then(
-      ({data}) => {
-        const result = data.result;
-        const currentDate = new Date(result.time_posted);
-        setPaymentCode(result.payment_code);
-        setPayBefore(new Date(currentDate.setDate(currentDate.getDate() + 1)));
-        setBookCode(result.booking_code);
-        setAmount(result.amount_rented);
-        setStartDate(new Date(result.rent_start_date).toDateString());
-        setFinishDate(new Date(result.rent_finish_date).toDateString());
-        setPrepayment(result.prepayment);
-        getVehicles({id: result.model_id})
-          .then(vehicleData => {
-            const resultModel = vehicleData.data.result.data[0].model;
-            setModel(resultModel);
-          })
-          .catch(err => console.log(err));
-      },
-    );
+    getTransactionByID(transactionIdParams).then(({data}) => {
+      const result = data.result;
+      const currentDate = new Date(result.time_posted);
+      setPaymentCode(result.payment_code);
+      setPayBefore(new Date(currentDate.setDate(currentDate.getDate() + 1)));
+      setBookCode(result.booking_code);
+      setAmount(result.amount_rented);
+      setStartDate(new Date(result.rent_start_date).toDateString());
+      setFinishDate(new Date(result.rent_finish_date).toDateString());
+      setPrepayment(result.prepayment);
+      getVehicles({id: result.model_id})
+        .then(vehicleData => {
+          setLoadingModal(false);
+          const resultModel = vehicleData.data.result.data[0].model;
+          setModel(resultModel);
+        })
+        .catch(err => {
+          setLoadingModal(false);
+          console.log(err);
+        });
+    });
   }, []);
 
   const copyToClipboard = () => {
@@ -68,31 +99,47 @@ const Payment3 = props => {
   };
 
   const finishPaymentHandler = () => {
+    setLoadingModal(true);
     const body =
       auth.authLevel === 3
         ? {
-            id: route.params.transactionId || passedData.id,
+            id: transactionIdParams,
             user_paid_status: 1,
           }
         : {
-            id: route.params.transactionId || passedData.id,
+            id: transactionIdParams,
             seller_paid_status: 1,
           };
     patchTransaction(body)
       .then(() => {
         confirmNotification();
-        props.navigation.navigate('FinishedPayment', {passedData});
+        setLoadingModal(false);
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'FinishedPayment'}],
+        });
       })
-      .catch(() => {
+      .catch(error => {
+        setLoadingModal(false);
+        console.log(error.response);
         ToastAndroid.show('Payment Failed.', ToastAndroid.SHORT);
       });
   };
 
   return (
     <View style={styles.container}>
+      <LoadingModal
+        modalVisible={loadingModal}
+        setModalVisible={() => {
+          setLoadingModal;
+        }}
+      />
       <Pressable
         onPress={() => {
-          navigation.goBack();
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Home'}],
+          });
         }}
         style={[styles.flexRow, styles.header]}>
         <Ionicons name="chevron-back-outline" size={28} />
@@ -137,14 +184,14 @@ const Payment3 = props => {
         <Text style={styles3.normalTxt}>Bank account information :</Text>
         <Text style={[styles.bigTxt, styles3.center]}>0290-90203-345-2</Text>
         <Text style={[styles3.normalTxt, styles3.owner]}>
-          Vespa rental Jogja
+          {transaction.model}
         </Text>
         <View style={styles3.bookContainer}>
           <Text style={styles3.normalTxt}>Booking Code : </Text>
           <Text style={styles3.bookCode}>{bookCode}</Text>
         </View>
         <Text style={[styles3.smallTxt, styles3.center]}>
-          Use booking code to pick up your vespa
+          Use booking code to pick up your {transaction.model}
         </Text>
         <View style={styles3.copyBtnContainer}>
           <Pressable style={styles3.copyBtn} onPress={copyToClipboard}>
@@ -157,7 +204,7 @@ const Payment3 = props => {
         <Text>
           {amount} {model}
         </Text>
-        <Text>{duration} day(s)</Text>
+        <Text>{transaction.duration} day(s)</Text>
         <Text>
           {startDate} to {finishDate}
         </Text>
