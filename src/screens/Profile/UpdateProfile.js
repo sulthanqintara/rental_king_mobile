@@ -57,15 +57,14 @@ const UpdateProfile = props => {
     name && form.append('name', name);
     email && form.append('email', email);
     phone && form.append('phone_number', phone);
-    form.append(
-      'DOB',
-      `${dob.getFullYear()}-${dob.getMonth()}-${dob.getDate()}`,
-    );
+
+    form.append('DOB', dob.toISOString().substr(0, 19).replace('T', ' '));
     address && form.append('address', address);
+    console.log(form);
     dispatch(profileAction(form, auth.user_id));
     ToastAndroid.show('Profile Updated!', ToastAndroid.SHORT);
   };
-
+  console.log(dob.getFullYear());
   const onImagePickHandler = () => {
     launchImageLibrary(
       {mediaType: 'photo', maxHeight: 500, maxWidth: 500, quality: 0.75},
