@@ -25,11 +25,11 @@ export default StyleSheet.create({
     borderRadius: 10,
     marginVertical: 9,
     flexDirection: 'row',
-    paddingHorizontal: 14,
     alignItems: 'center',
   },
   input: {
     flex: 1,
+    paddingHorizontal: 14,
     paddingVertical: 14,
     color: 'white',
   },

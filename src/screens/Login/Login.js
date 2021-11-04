@@ -120,7 +120,7 @@ const Login = props => {
             control={control}
             name="password"
             render={({field: {onChange, onBlur, value}}) => (
-              <View style={styles.inputContainer}>
+              <View style={[styles.inputContainer, {paddingRight: 14}]}>
                 <TextInput
                   autoCompleteType="password"
                   secureTextEntry={!showPassword}
