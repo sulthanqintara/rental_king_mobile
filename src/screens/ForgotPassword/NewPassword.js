@@ -82,7 +82,7 @@ const ForgotPasswordCode = props => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  placeholder="Enter your code"
+                  placeholder="Enter Your New Password"
                   placeholderTextColor="white"
                 />
               </>

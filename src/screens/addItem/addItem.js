@@ -9,6 +9,8 @@ import {
   ToastAndroid,
   PermissionsAndroid,
   Platform,
+  Modal,
+  TouchableOpacity,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useSelector} from 'react-redux';
@@ -30,6 +32,7 @@ const AddItem = ({navigation}) => {
     setLocationOpen(false);
   }, []);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalPicture, setModalPicture] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [locationValue, setLocationValue] = useState(null);
@@ -122,6 +125,37 @@ const AddItem = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalPicture}
+        onRequestClose={() => {
+          setModalPicture(!modalPicture);
+        }}>
+        <View style={styles.centeredModal}>
+          <View style={styles.modalContentContainer}>
+            <View style={styles.modalRow}>
+              <Text style={styles.disabled}>Choose Image...</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.modalRow}
+              onPress={() => {
+                requestCameraPermission();
+                setModalPicture(!modalPicture);
+              }}>
+              <Text>Camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalRow}
+              onPress={() => {
+                onImagePickHandler();
+                setModalPicture(!modalPicture);
+              }}>
+              <Text>Library</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.header}>
         <Pressable
           onPress={() => {
@@ -140,12 +174,18 @@ const AddItem = ({navigation}) => {
       <ScrollView>
         <Pressable
           style={styles.addPictureContainer}
-          onPress={requestCameraPermission}>
+          onPress={() => {
+            setModalPicture(!modalPicture);
+          }}>
           <ImageBackground
             source={picture ? {uri: picture} : camIcon}
             style={styles.addCamIcon}
             imageStyle={styles.addCamIcon}>
-            <Pressable style={styles.addPicButton} onPress={onImagePickHandler}>
+            <Pressable
+              style={styles.addPicButton}
+              onPress={() => {
+                setModalPicture(!modalPicture);
+              }}>
               <Text style={styles.addBtnTxt}>+</Text>
             </Pressable>
           </ImageBackground>

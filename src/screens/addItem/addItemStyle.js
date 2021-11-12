@@ -1,4 +1,6 @@
 import {StyleSheet} from 'react-native';
+import {Dimensions} from 'react-native';
+const d = Dimensions.get('window').width;
 
 export default StyleSheet.create({
   container: {
@@ -16,7 +18,6 @@ export default StyleSheet.create({
     fontWeight: '700',
     fontSize: 18,
     marginRight: 'auto',
-    marginBottom: 10,
   },
   headerCancel: {
     color: 'grey',
@@ -97,4 +98,25 @@ export default StyleSheet.create({
   counterContainer: {marginBottom: 30},
   negativeCounter: {marginRight: 20},
   positiveCounter: {marginLeft: 20},
+  centeredModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContentContainer: {
+    backgroundColor: 'white',
+    width: d * 0.76,
+    paddingLeft: d * 0.05,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    paddingVertical: 10,
+  },
+  modalRow: {
+    height: 50,
+    justifyContent: 'center',
+  },
+  disabled: {
+    color: '#6666',
+  },
 });
