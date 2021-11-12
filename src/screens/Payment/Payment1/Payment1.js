@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styles from './Payment1Style';
-// import RNPickerSelect from 'react-native-picker-select';
 import {Picker} from '@react-native-picker/picker';
 import LinearGradient from 'react-native-linear-gradient';
 

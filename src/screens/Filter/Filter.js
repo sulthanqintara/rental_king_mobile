@@ -3,7 +3,7 @@ import {View, Pressable, Text} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './FilterStyle';
 import {Modal, Portal, Provider} from 'react-native-paper';
-import DatePicker from 'react-native-date-picker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const Filter = props => {
   const passedData = props.route.params;
@@ -110,12 +110,24 @@ const Filter = props => {
             </Text>
             <Ionicons name="chevron-forward" size={20} color="#999999" />
           </Pressable>
-          <DatePicker
+          {/* <DatePicker
             modal
             mode="date"
             open={dateVisible}
             date={typeof date === 'object' ? date : new Date()}
             onConfirm={pickedDate => {
+              hideDate();
+              setDate(pickedDate);
+            }}
+            onCancel={() => {
+              hideDate();
+            }}
+          /> */}
+          <DateTimePickerModal
+            isVisible={dateVisible}
+            mode="date"
+            date={typeof date === 'object' ? date : new Date()}
+            onConfirm={date => {
               hideDate();
               setDate(pickedDate);
             }}

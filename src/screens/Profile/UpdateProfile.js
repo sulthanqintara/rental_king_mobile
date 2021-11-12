@@ -10,11 +10,13 @@ import {
   ToastAndroid,
   PermissionsAndroid,
   Platform,
+  Modal,
+  TouchableOpacity,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import DatePicker from 'react-native-date-picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {profileAction} from '../../redux/actionCreators/auth';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import {RadioButton} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -41,6 +43,7 @@ const UpdateProfile = props => {
       : API_URL + '/img/profile-icon-png-898.png',
   );
   const [pictureUpload, setPictureUpload] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   const saveHandler = () => {
     const form = new FormData();
@@ -107,9 +110,40 @@ const UpdateProfile = props => {
       console.warn(err);
     }
   };
-
+  console.log(modalOpen);
   return (
     <View style={{flex: 1}}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalOpen}
+        onRequestClose={() => {
+          setModalOpen(!modalOpen);
+        }}>
+        <View style={styles.centeredModal}>
+          <View style={styles.modalContentContainer}>
+            <View style={styles.modalRow}>
+              <Text style={styles.disabled}>Choose Image for Profile</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.modalRow}
+              onPress={() => {
+                requestCameraPermission();
+                setModalOpen(!modalOpen);
+              }}>
+              <Text>Camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalRow}
+              onPress={() => {
+                onImagePickHandler();
+                setModalOpen(!modalOpen);
+              }}>
+              <Text>Library</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View style={[styles.header, styles.container]}>
         <View style={styles.title}>
           <Pressable onPress={() => props.navigation.goBack()}>
@@ -119,14 +153,20 @@ const UpdateProfile = props => {
         </View>
       </View>
       <ScrollView style={styles.container}>
-        <Pressable style={styles.profileContainer} onPress={onImagePickHandler}>
+        <Pressable
+          style={styles.profileContainer}
+          onPress={() => {
+            setModalOpen(!modalOpen);
+          }}>
           <ImageBackground
             style={styles.profilePic}
             source={{uri: picture}}
             imageStyle={{borderRadius: 50}}>
             <Pressable
               style={styles.profilebtn}
-              onPress={requestCameraPermission}>
+              onPress={() => {
+                setModalOpen(!modalOpen);
+              }}>
               {/* <Ionicons name="create-outline" size={20} /> */}
               <MaterialIcons name="edit" size={20} />
             </Pressable>
@@ -137,12 +177,12 @@ const UpdateProfile = props => {
           value={gender}>
           <View style={styles.gender}>
             <View style={styles.genderOptions}>
-              <Text>Female</Text>
-              <RadioButton value={1} color="#FFCD61" />
-            </View>
-            <View style={styles.genderOptions}>
               <Text>Male</Text>
               <RadioButton value={0} color="#FFCD61" />
+            </View>
+            <View style={styles.genderOptions}>
+              <Text>Female</Text>
+              <RadioButton value={1} color="#FFCD61" />
             </View>
           </View>
         </RadioButton.Group>
@@ -174,11 +214,9 @@ const UpdateProfile = props => {
         <Pressable style={styles.field} onPress={() => setOpen(true)}>
           <Text>{dob.toDateString()}</Text>
         </Pressable>
-        <DatePicker
-          modal
+        <DateTimePickerModal
+          isVisible={open}
           mode="date"
-          open={open}
-          date={dob}
           onConfirm={date => {
             setOpen(false);
             setDob(date);
